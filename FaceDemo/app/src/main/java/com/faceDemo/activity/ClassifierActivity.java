@@ -39,6 +39,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.pytorch.Module;
 
@@ -65,6 +66,9 @@ public class ClassifierActivity extends CameraActivity {
     private Module mModule;
     private String mModuleAssetName;
     public static final String INTENT_MODULE_ASSET_NAME = "INTENT_MODULE_ASSET_NAME";
+
+    private String mPngAssetName;
+    public static final String INTENT_PNG_ASSET_NAME = "INTENT_PNG_ASSET_NAME";
 
     private int pytorchUseSzie=200;
 
@@ -195,9 +199,15 @@ public class ClassifierActivity extends CameraActivity {
 
                 Mat bitmapMat =new Mat();
                 org.opencv.android.Utils.bitmapToMat(bitmap,bitmapMat);
+                List<Mat> mv_0 = new ArrayList<Mat>();// 分离出来的彩色通道数据
+                Core.split(bitmapMat, mv_0);// 分离色彩通道
+                final Mat matNext = mv_0.get(3);
+                mv_0.remove(3);
+                Mat mat_0=new Mat(bitmapMat.size(),CvType.CV_8UC3);
+                Core.merge(mv_0,mat_0);
 
                 //旋转bitmapMat
-                Mat rotateMat=RotateMat(bitmapMat,new Point(middlePoint.X,middlePoint.Y),faceLandmarkInfo.roll);
+                Mat rotateMat=RotateMat(mat_0,new Point(middlePoint.X,middlePoint.Y),faceLandmarkInfo.roll);
 
                 //裁剪rotateMat
                 org.opencv.core.Rect rect=new org.opencv.core.Rect(x,y,width,height);
@@ -205,29 +215,33 @@ public class ClassifierActivity extends CameraActivity {
 
                 //缩小rectMat
                 org.opencv.core.Size dsize = new org.opencv.core.Size(pytorchUseSzie, pytorchUseSzie); // 设置新图片的大小
-                Mat scaleSmallMat = new Mat(dsize, CvType.CV_16S);// 创建一个新的Mat（opencv的矩阵数据类型）
+                Mat scaleSmallMat = new Mat(dsize, CvType.CV_8UC3);// 创建一个新的Mat（opencv的矩阵数据类型）
                 Imgproc.resize(rectMat, scaleSmallMat,dsize);//调用Imgproc的Resize方法，进行图片缩放
 
-                //Log.d("scaleMat", "processImage:scaleMat width="+scaleSmallMat.rows()+" height="+scaleSmallMat.cols());
+                //Log.d("scaleSmallMat", "processImage:scaleMat width="+scaleSmallMat.rows()+" height="+scaleSmallMat.cols()+" type="+scaleSmallMat.type());
 
                 //final Bitmap map=Bitmap.createBitmap(scaleSmallMat.cols(),scaleSmallMat.rows(), Bitmap.Config.ARGB_8888);
-               // org.opencv.android.Utils.matToBitmap(scaleSmallMat,map);
+                // org.opencv.android.Utils.matToBitmap(scaleSmallMat,map);
 
+                /*
                 //图片模型转换
                 List<Mat> mv = new ArrayList<Mat>();// 分离出来的彩色通道数据
                 Core.split(scaleSmallMat, mv);// 分离色彩通道
-                //List<Mat> mv3=new ArrayList<Mat>();
-//                mv3.add(mv.get(2));
-//                mv3.add(mv.get(1));
-//                mv3.add(mv.get(0));
-//                Mat dest=new Mat();
-//                Core.merge(mv3, dest);// 合并split()方法分离出来的彩色通道数据
-//
-//                dest.convertTo(dest,CvType.CV_32F,2.0/255,-1);
-//                int size=(int)(dest.total()*3);
-//                float[] data=new float[size];
-//                dest.get(0,0,data);
+                List<Mat> mv3=new ArrayList<Mat>();
+                mv3.add(mv.get(0));
+                mv3.add(mv.get(1));
+                mv3.add(mv.get(2));
+                Mat dest=new Mat();
+                Core.merge(mv3, dest);// 合并split()方法分离出来的彩色通道数据
 
+                 */
+
+                scaleSmallMat.convertTo(scaleSmallMat,CvType.CV_32FC3,2.0/255,-1);
+                int size=(int)(scaleSmallMat.total()*3);
+                float[] data=new float[size];
+                scaleSmallMat.get(0,0,data);
+
+                /*
                 Mat a1=mv.get(0);
                 Mat a2=mv.get(1);
                 Mat a3=mv.get(2);
@@ -260,11 +274,14 @@ public class ClassifierActivity extends CameraActivity {
                 }
 
 
+                 */
+
                 //Log.d("data", "processImage: data="+data[2]);
                 //final Bitmap pyTorchBitmap = BitmapUtils.PytorchFunction(mModule, this, map, data,200, 200);
-                final float[] pyTorchData = BitmapUtils.PytorchFunction(mModule, this, data4,pytorchUseSzie, pytorchUseSzie);
+                final float[] pyTorchData = BitmapUtils.PytorchFunction(mModule, this, data,pytorchUseSzie, pytorchUseSzie);
                 Log.d("pyTorchData", "processImage: pyTorchData="+pyTorchData.length);
 
+                /*
                 int dataSize=pytorchUseSzie*pytorchUseSzie;
                 float[] data11=new float[dataSize];
                 float[] data22=new float[dataSize];
@@ -280,28 +297,43 @@ public class ClassifierActivity extends CameraActivity {
                     data44[j+2]=pyTorchData[i+dataSize*2];
                 }
 
+                 */
+
                 Mat pyTorchMat=new Mat(pytorchUseSzie,pytorchUseSzie,CvType.CV_32FC3);
-                pyTorchMat.put(0,0,data44);
+                pyTorchMat.put(0,0,pyTorchData);
 
-                pyTorchMat.convertTo(pyTorchMat,CvType.CV_8U,255.0/2,255.0/2);
+                pyTorchMat.convertTo(pyTorchMat,CvType.CV_8UC3,255.0/2,255.0/2);
 
-                List<Mat> mv1 = new ArrayList<Mat>();// 分离出来的彩色通道数据
-                Core.split(pyTorchMat, mv1);// 分离色彩通道
-                mv1.add(mv.get(3));
-                Mat dest1=new Mat();
+//                List<Mat> mv1 = new ArrayList<Mat>();// 分离出来的彩色通道数据
+//                Core.split(pyTorchMat, mv1);// 分离色彩通道
+//                mv1.add(mv.get(3));
+                //Mat dest1 = new Mat(200,200,CvType.CV_8UC4);
                 //Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
-                Core.merge(mv1, dest1);// 合并split()方法分离出来的彩色通道数据
-                Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
+                //Core.merge(mv1, dest1);// 合并split()方法分离出来的彩色通道数据
+//                Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
+
+
+                final String pngFileAbsoluteFilePath = new File(
+                        Utils.assetFilePath(this, getPngAssetName())).getAbsolutePath();
+                Mat src = Imgcodecs.imread(pngFileAbsoluteFilePath,Imgcodecs.IMREAD_UNCHANGED);
+//                Log.d("Imgcodecs", "Imgcodecs: src="+src.size()+" channels="+src.channels());
+                org.opencv.core.Size srcSize = new org.opencv.core.Size(width, width); // 设置新图片的大小
+                Mat srclMat = new Mat(srcSize,CvType.CV_8UC3);
+                Imgproc.resize(src, srclMat,srcSize);//调用Imgproc的Resize方法，进行图片缩放
+                Log.d("Imgcodecs", "Imgcodecs: srclMat="+srclMat.size()+" channels="+srclMat.channels());
+
+//                Mat dest000 = new Mat(200,200,CvType.CV_8UC4);
+//                Core.multiply(dest1,srclMat,dest000);
 
 
                 //转换后的图片放回原大小
 //                Mat pyTorchMat = new Mat();
 //                org.opencv.android.Utils.bitmapToMat(pyTorchBitmap,pyTorchMat);
                 org.opencv.core.Size pyTorchOriginalSize = new org.opencv.core.Size(width, height); // 设置新图片的大小
-                Mat pyTorchScaleOriginalMat = new Mat(pyTorchOriginalSize,CvType.CV_16S);
-                Imgproc.resize(dest1, pyTorchScaleOriginalMat,pyTorchOriginalSize);//调用Imgproc的Resize方法，进行图片缩放
+                Mat pyTorchScaleOriginalMat = new Mat(pyTorchOriginalSize,CvType.CV_8UC3);
+                Imgproc.resize(pyTorchMat, pyTorchScaleOriginalMat,pyTorchOriginalSize);//调用Imgproc的Resize方法，进行图片缩放
 
-               // Log.d("scaleOriginalMat", "processImage: scaleOriginalMat.width="+scaleOriginalMat.width()+" height="+scaleOriginalMat.height());
+                // Log.d("scaleOriginalMat", "processImage: scaleOriginalMat.width="+scaleOriginalMat.width()+" height="+scaleOriginalMat.height());
 
                 //将模型转换后的头部图片合并到rotateMat上
                 org.opencv.core.Rect rec = new org.opencv.core.Rect(x,y, pyTorchScaleOriginalMat.cols(), pyTorchScaleOriginalMat.rows());
@@ -310,11 +342,13 @@ public class ClassifierActivity extends CameraActivity {
 
                 //最后一步
                 //在rotateMat上创建mask掩码
-                Mat mask = Mat.zeros(rotateMat.rows(), rotateMat.cols(), CvType.CV_8UC1);
+                Mat mask = Mat.zeros(rotateMat.rows(), rotateMat.cols(), CvType.CV_8UC3);
                 int cx = x;
                 int cy = y;
                 org.opencv.core.Rect maskRect=new org.opencv.core.Rect(cx,cy,width,height);
-                Imgproc.rectangle(mask, maskRect, new Scalar(90,95,234), -1, 8);
+                Mat mat1SubA=mask.submat(maskRect);
+                srclMat.copyTo(mat1SubA);
+                Log.d("mask", "mask: mask="+mask.size()+" channels="+mask.channels());
 
                 //对mask掩码旋转
                 Mat rotateMask=RotateMat(mask,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
@@ -322,16 +356,35 @@ public class ClassifierActivity extends CameraActivity {
                 //在把rotateMat旋转回正
                 Mat ratoteOriginalMat=RotateMat(rotateMat,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
 
+                rotateMask.convertTo(rotateMask,CvType.CV_32FC3,1.0/255,0);
+                ratoteOriginalMat.convertTo(ratoteOriginalMat,CvType.CV_32FC3,1.0/255,0);
+                Mat mat9999=new Mat(ratoteOriginalMat.size(),CvType.CV_32FC3);
+                Core.multiply(rotateMask,ratoteOriginalMat,mat9999);
+                //mat9999.convertTo(mat9999,CvType.CV_8UC3,255.0,0);
+
+
+                Mat matInvMask=new Mat(mat_0.size(), CvType.CV_32FC3,new Scalar(1.0,1.0,1.0));
+                Mat matInvMask_0 = new Mat(mat_0.size(), CvType.CV_32FC3);
+                Core.subtract(matInvMask,rotateMask,matInvMask_0);
+                mat_0.convertTo(mat_0,CvType.CV_32FC3,1.0/255,0);
+                Mat mat8888=new Mat(mat_0.size(),CvType.CV_32FC3);
+                Core.multiply(matInvMask_0,mat_0,mat8888);
+                //mat8888.convertTo(mat8888,CvType.CV_8UC3,255.0,0);
+
+                Mat allMat=new Mat(mat_0.size(),CvType.CV_32FC3);
+                Core.add(mat9999,mat8888,allMat);
+                allMat.convertTo(allMat,CvType.CV_8UC3,255.0,0);
 
                 //测试
-                //final Bitmap TTT=Bitmap.createBitmap(dest1.cols(),dest1.rows(), Bitmap.Config.ARGB_8888);
-                //org.opencv.android.Utils.matToBitmap(dest1,TTT);
+                final Bitmap TTT=Bitmap.createBitmap(allMat.cols(),allMat.rows(), Bitmap.Config.ARGB_8888);
+                org.opencv.android.Utils.matToBitmap(allMat,TTT);
 
                 //把矩阵复制到另一个矩阵中（mask为操作掩码。它的非零元素表示矩阵中某个要被复制）
-                ratoteOriginalMat.copyTo( bitmapMat, rotateMask );
+                //ratoteOriginalMat.copyTo( bitmapMat, rotateMask );
 
-                final Bitmap AAA=Bitmap.createBitmap(bitmapMat.cols(),bitmapMat.rows(), Bitmap.Config.ARGB_8888);
-                org.opencv.android.Utils.matToBitmap(bitmapMat,AAA);
+
+//                final Bitmap AAA=Bitmap.createBitmap(bitmapMat.cols(),bitmapMat.rows(), Bitmap.Config.ARGB_8888);
+//                org.opencv.android.Utils.matToBitmap(bitmapMat,AAA);
 
 
                 /*
@@ -401,14 +454,13 @@ public class ClassifierActivity extends CameraActivity {
                     bigBitmapView.post(new Runnable() {
                         @Override
                         public void run() {
-                            bigBitmapView.setImageBitmap(AAA);
+                            //bigBitmapView.setImageBitmap(AAA);
                         }
                     });
 
                 bigBgView.post(new Runnable() {
                     @Override
-                    public void run() {
-                        //bigBgView.setImageBitmap((TTT));
+                    public void run() { bigBgView.setImageBitmap((TTT));
                     }
                 });
 
@@ -450,12 +502,24 @@ public class ClassifierActivity extends CameraActivity {
         if (!TextUtils.isEmpty(mModuleAssetName)) {
             return mModuleAssetName;
         }
-        final String moduleAssetNameFromIntent = "traced-model-200-2.pt";
+        final String moduleAssetNameFromIntent = "traced-model-permute.pt";
         mModuleAssetName = !TextUtils.isEmpty(moduleAssetNameFromIntent)
                 ? moduleAssetNameFromIntent
                 : "traced-model-only.pt";
 
         return mModuleAssetName;
+    }
+
+    protected String getPngAssetName() {
+        if (!TextUtils.isEmpty(mPngAssetName)) {
+            return mPngAssetName;
+        }
+        final String pngAssetNameFromIntent = "standardMASK.jpg";
+        mPngAssetName = !TextUtils.isEmpty(pngAssetNameFromIntent)
+                ? pngAssetNameFromIntent
+                : "standardMASK.jpg";
+
+        return mPngAssetName;
     }
 
     private List<FaceLandmarkInfo> lastList;
