@@ -51,21 +51,25 @@ public class BitmapUtils {
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
     }
 
-    public static Bitmap PytorchFunction(Module module, Context context, Bitmap _bitmap,int newWidth,int newHeight) {
+    public static float[] PytorchFunction(Module module, Context context, float[] data, int newWidth,int newHeight) {
 
-        Bitmap bitmap = Bitmap.createScaledBitmap(_bitmap, newWidth, newHeight, true);
+        //Bitmap bitmap = Bitmap.createScaledBitmap(_bitmap, newWidth, newHeight, true);
         final int fWidth = newWidth;
         final int fHeight = newHeight;
 
         float[] floatMean = new float[]{(float) 0.5, (float) 0.5, (float) 0.5};
         float[] floatStd = new float[]{(float) 0.5, (float) 0.5, (float) 0.5};
-        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap, floatMean, floatStd);
+        // Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(_bitmap, floatMean, floatStd);
+        final Tensor inputTensor =Tensor.fromBlob(data, new long[]{1,3,200,200});
+        Log.d("inputTensor", "PytorchFunction: inputTensor="+inputTensor);
         final Module finalModule = module;
 
         long start_time = System.nanoTime();
         Tensor transfered = finalModule.forward(IValue.from(inputTensor)).toTensor();
         long end_time = System.nanoTime();
         float[] floatImage = transfered.getDataAsFloatArray();
+        return floatImage;
+        /*
         int[] intImage = new int[floatImage.length];
         Log.d("intImage", "intImage: "+intImage.length);
         for (int i = 0; i <= floatImage.length - 1; i++) {
@@ -84,5 +88,7 @@ public class BitmapUtils {
         Bitmap transferedBitmap = Bitmap.createBitmap(colors, fWidth, fHeight, Bitmap.Config.RGB_565);
         //Toast.makeText(context, "time used: " + String.valueOf((end_time - start_time) / 1000000000.0), Toast.LENGTH_LONG).show();
         return transferedBitmap;
+
+         */
     }
 }

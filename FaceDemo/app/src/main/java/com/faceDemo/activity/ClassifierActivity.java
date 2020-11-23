@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.YuvImage;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -30,9 +31,20 @@ import com.tenginekit.face.FaceDetectInfo;
 import com.tenginekit.face.FaceLandmarkInfo;
 import com.tenginekit.model.TenginekitPoint;
 
+import org.opencv.android.BaseLoaderCallback;
+import org.opencv.android.LoaderCallbackInterface;
+import org.opencv.android.OpenCVLoader;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
 import org.pytorch.Module;
 
 import java.io.File;
+import java.nio.Buffer;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +65,8 @@ public class ClassifierActivity extends CameraActivity {
     private Module mModule;
     private String mModuleAssetName;
     public static final String INTENT_MODULE_ASSET_NAME = "INTENT_MODULE_ASSET_NAME";
+
+    private int pytorchUseSzie=200;
 
     @Override
     protected int getLayoutId() {
@@ -159,10 +173,169 @@ public class ClassifierActivity extends CameraActivity {
                 int x=(int)(middlePoint.X-bitmapWidth/2);
                 int y=(int)(middlePoint.Y-yUp);
 
-                Log.d("TenginekitPoint", "processImage: eyeDis="+dis+" bitmapWidth="+bitmapWidth+" yUp="+yUp+" yDown="+yDown+"  x="+ x+" y="+y+" middlePoint.x="+middlePoint.X+" middlePoint.y"+middlePoint.Y);
+                //Log.d("TenginekitPoint", "processImage: eyeDis="+dis+" bitmapWidth="+bitmapWidth+" yUp="+yUp+" yDown="+yDown+"  x="+ x+" y="+y+" middlePoint.x="+middlePoint.X+" middlePoint.y"+middlePoint.Y);
 
-                Log.d("faceLandmarkInfo", "processImage:faceLandmarkInfo.roll="+faceLandmarkInfo.roll);
+                //OpenCV方法
+                //mNV21Bytes转Mat
+                final Bitmap bitmap = BytetoBitmap(mNV21Bytes);
 
+                //边界处理
+                if (bitmapWidth>bitmap.getWidth())
+                    bitmapWidth=bitmap.getWidth();
+                int width = (int) bitmapWidth;
+                int height = (int) bitmapWidth;
+                if (x+width>bitmap.getWidth())
+                    x=bitmap.getWidth()-width;
+                if (y+height>bitmap.getHeight())
+                    y=bitmap.getHeight()-height;
+                if (x<0)
+                    x=0;
+                if (y<0)
+                    y=0;
+
+                Mat bitmapMat =new Mat();
+                org.opencv.android.Utils.bitmapToMat(bitmap,bitmapMat);
+
+                //旋转bitmapMat
+                Mat rotateMat=RotateMat(bitmapMat,new Point(middlePoint.X,middlePoint.Y),faceLandmarkInfo.roll);
+
+                //裁剪rotateMat
+                org.opencv.core.Rect rect=new org.opencv.core.Rect(x,y,width,height);
+                Mat rectMat=new Mat(rotateMat,rect);
+
+                //缩小rectMat
+                org.opencv.core.Size dsize = new org.opencv.core.Size(pytorchUseSzie, pytorchUseSzie); // 设置新图片的大小
+                Mat scaleSmallMat = new Mat(dsize, CvType.CV_16S);// 创建一个新的Mat（opencv的矩阵数据类型）
+                Imgproc.resize(rectMat, scaleSmallMat,dsize);//调用Imgproc的Resize方法，进行图片缩放
+
+                //Log.d("scaleMat", "processImage:scaleMat width="+scaleSmallMat.rows()+" height="+scaleSmallMat.cols());
+
+                //final Bitmap map=Bitmap.createBitmap(scaleSmallMat.cols(),scaleSmallMat.rows(), Bitmap.Config.ARGB_8888);
+               // org.opencv.android.Utils.matToBitmap(scaleSmallMat,map);
+
+                //图片模型转换
+                List<Mat> mv = new ArrayList<Mat>();// 分离出来的彩色通道数据
+                Core.split(scaleSmallMat, mv);// 分离色彩通道
+                //List<Mat> mv3=new ArrayList<Mat>();
+//                mv3.add(mv.get(2));
+//                mv3.add(mv.get(1));
+//                mv3.add(mv.get(0));
+//                Mat dest=new Mat();
+//                Core.merge(mv3, dest);// 合并split()方法分离出来的彩色通道数据
+//
+//                dest.convertTo(dest,CvType.CV_32F,2.0/255,-1);
+//                int size=(int)(dest.total()*3);
+//                float[] data=new float[size];
+//                dest.get(0,0,data);
+
+                Mat a1=mv.get(0);
+                Mat a2=mv.get(1);
+                Mat a3=mv.get(2);
+                a1.convertTo(a1,CvType.CV_32F,2.0/255,-1);
+                a2.convertTo(a2,CvType.CV_32F,2.0/255,-1);
+                a3.convertTo(a3,CvType.CV_32F,2.0/255,-1);
+                int size1=(int)(a1.total());
+                float[] data1=new float[size1];
+                a1.get(0,0,data1);
+                int size2=(int)(a1.total());
+                float[] data2=new float[size2];
+                a2.get(0,0,data2);
+                int size3=(int)(a2.total());
+                float[] data3=new float[size3];
+                a3.get(0,0,data3);
+
+                float[] data4=new float[size1+size2+size3];
+
+                for (int i=0;i<data1.length;i++)
+                {
+                    data4[i]=data1[i];
+                }
+                for (int i=0;i<data2.length;i++)
+                {
+                    data4[i+data1.length]=data2[i];
+                }
+                for (int i=0;i<data3.length;i++)
+                {
+                    data4[i+data1.length+data2.length]=data3[i];
+                }
+
+
+                //Log.d("data", "processImage: data="+data[2]);
+                //final Bitmap pyTorchBitmap = BitmapUtils.PytorchFunction(mModule, this, map, data,200, 200);
+                final float[] pyTorchData = BitmapUtils.PytorchFunction(mModule, this, data4,pytorchUseSzie, pytorchUseSzie);
+                Log.d("pyTorchData", "processImage: pyTorchData="+pyTorchData.length);
+
+                int dataSize=pytorchUseSzie*pytorchUseSzie;
+                float[] data11=new float[dataSize];
+                float[] data22=new float[dataSize];
+                float[] data33=new float[dataSize];
+
+                float[] data44=new float[dataSize*3];
+
+                for (int i=0;i<dataSize;i++)
+                {
+                    int j=i*3;
+                    data44[j]=pyTorchData[i];
+                    data44[j+1]=pyTorchData[i+dataSize];
+                    data44[j+2]=pyTorchData[i+dataSize*2];
+                }
+
+                Mat pyTorchMat=new Mat(pytorchUseSzie,pytorchUseSzie,CvType.CV_32FC3);
+                pyTorchMat.put(0,0,data44);
+
+                pyTorchMat.convertTo(pyTorchMat,CvType.CV_8U,255.0/2,255.0/2);
+
+                List<Mat> mv1 = new ArrayList<Mat>();// 分离出来的彩色通道数据
+                Core.split(pyTorchMat, mv1);// 分离色彩通道
+                mv1.add(mv.get(3));
+                Mat dest1=new Mat();
+                //Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
+                Core.merge(mv1, dest1);// 合并split()方法分离出来的彩色通道数据
+                Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
+
+
+                //转换后的图片放回原大小
+//                Mat pyTorchMat = new Mat();
+//                org.opencv.android.Utils.bitmapToMat(pyTorchBitmap,pyTorchMat);
+                org.opencv.core.Size pyTorchOriginalSize = new org.opencv.core.Size(width, height); // 设置新图片的大小
+                Mat pyTorchScaleOriginalMat = new Mat(pyTorchOriginalSize,CvType.CV_16S);
+                Imgproc.resize(dest1, pyTorchScaleOriginalMat,pyTorchOriginalSize);//调用Imgproc的Resize方法，进行图片缩放
+
+               // Log.d("scaleOriginalMat", "processImage: scaleOriginalMat.width="+scaleOriginalMat.width()+" height="+scaleOriginalMat.height());
+
+                //将模型转换后的头部图片合并到rotateMat上
+                org.opencv.core.Rect rec = new org.opencv.core.Rect(x,y, pyTorchScaleOriginalMat.cols(), pyTorchScaleOriginalMat.rows());
+                Mat mat1Sub=rotateMat.submat(rec);
+                pyTorchScaleOriginalMat.copyTo(mat1Sub);
+
+                //最后一步
+                //在rotateMat上创建mask掩码
+                Mat mask = Mat.zeros(rotateMat.rows(), rotateMat.cols(), CvType.CV_8UC1);
+                int cx = x;
+                int cy = y;
+                org.opencv.core.Rect maskRect=new org.opencv.core.Rect(cx,cy,width,height);
+                Imgproc.rectangle(mask, maskRect, new Scalar(90,95,234), -1, 8);
+
+                //对mask掩码旋转
+                Mat rotateMask=RotateMat(mask,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
+
+                //在把rotateMat旋转回正
+                Mat ratoteOriginalMat=RotateMat(rotateMat,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
+
+
+                //测试
+                //final Bitmap TTT=Bitmap.createBitmap(dest1.cols(),dest1.rows(), Bitmap.Config.ARGB_8888);
+                //org.opencv.android.Utils.matToBitmap(dest1,TTT);
+
+                //把矩阵复制到另一个矩阵中（mask为操作掩码。它的非零元素表示矩阵中某个要被复制）
+                ratoteOriginalMat.copyTo( bitmapMat, rotateMask );
+
+                final Bitmap AAA=Bitmap.createBitmap(bitmapMat.cols(),bitmapMat.rows(), Bitmap.Config.ARGB_8888);
+                org.opencv.android.Utils.matToBitmap(bitmapMat,AAA);
+
+
+                /*
+                //Bitmap方法
                 //btye[]转Bitmap
                 final Bitmap bitmap = BytetoBitmap(mNV21Bytes);
 
@@ -208,6 +381,8 @@ public class ClassifierActivity extends CameraActivity {
                 rotateMergeBitmap.getPixels(newPixels, 0, 480, 240, 320, 480, 640);
                 final Bitmap newBitmap = Bitmap.createBitmap(newPixels, 480, 640, rotateMergeBitmap.getConfig());
 
+                 */
+
                 if (bigBitmapView==null)
                 {
                     bigBitmapView = findViewById(R.id.bigBitmapview);
@@ -226,21 +401,21 @@ public class ClassifierActivity extends CameraActivity {
                     bigBitmapView.post(new Runnable() {
                         @Override
                         public void run() {
-                            //bigBitmapView.setImageBitmap(scaleBitmap);
+                            bigBitmapView.setImageBitmap(AAA);
                         }
                     });
 
                 bigBgView.post(new Runnable() {
                     @Override
                     public void run() {
-                        //bigBgView.setImageBitmap((mergeBitmap));
+                        //bigBgView.setImageBitmap((TTT));
                     }
                 });
 
                 mergeView.post(new Runnable() {
                     @Override
                     public void run() {
-                        mergeView.setImageBitmap((newBitmap));
+                        //mergeView.setImageBitmap((newBitmap));
                     }
                 });
 
@@ -275,7 +450,7 @@ public class ClassifierActivity extends CameraActivity {
         if (!TextUtils.isEmpty(mModuleAssetName)) {
             return mModuleAssetName;
         }
-        final String moduleAssetNameFromIntent = "traced-model-1118-2.pt";
+        final String moduleAssetNameFromIntent = "traced-model-200-2.pt";
         mModuleAssetName = !TextUtils.isEmpty(moduleAssetNameFromIntent)
                 ? moduleAssetNameFromIntent
                 : "traced-model-only.pt";
@@ -435,5 +610,45 @@ public class ClassifierActivity extends CameraActivity {
         }
         return max_X - min_X;
     }
+
+    public Mat RotateMat(Mat _mat,Point _point,float _angle)
+    {
+        Mat rotateMat=new Mat();
+        Mat matric = Imgproc.getRotationMatrix2D(_point,_angle,1);
+        org.opencv.core.Size size=new org.opencv.core.Size(_mat.cols(),_mat.rows());
+        Imgproc.warpAffine(_mat,rotateMat,matric,size);
+        return rotateMat;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback);
+        } else {
+            Log.d(TAG, "OpenCV library found inside package. Using it!");
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
+        }
+    }
+
+    //openCV4Android 需要加载用到
+    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+        @Override
+        public void onManagerConnected(int status) {
+            switch (status) {
+                case LoaderCallbackInterface.SUCCESS: {
+                    Log.i(TAG, "OpenCV loaded successfully");
+//                    mOpenCvCameraView.enableView();
+//                    mOpenCvCameraView.setOnTouchListener(ColorBlobDetectionActivity.this);
+                }
+                break;
+                default: {
+                    super.onManagerConnected(status);
+                }
+                break;
+            }
+        }
+    };
 
 }

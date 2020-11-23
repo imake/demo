@@ -44,6 +44,8 @@
             android:screenOrientation="portrait"
             android:theme="@style/XYAppThemeNoBar"
             />
+
+        <activity android:name=".activity.ClassifierActivity"/>
     </application>
 
 </manifest>

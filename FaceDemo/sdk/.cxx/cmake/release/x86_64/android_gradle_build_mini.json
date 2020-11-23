@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "C:\\PyTorchDemo\\FaceDemo\\sdk\\libcxx_helper\\CMakeLists.txt",
+    "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\ndk\\21.3.6528147\\build\\cmake\\android.toolchain.cmake",
+    "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\ndk\\21.3.6528147\\build\\cmake\\platforms.cmake"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\release\\x86_64\" clean"
+  ],
+  "buildTargetsCommand": "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\release\\x86_64\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "opencv_jni_shared-Release-x86_64": {
+      "artifactName": "opencv_jni_shared",
+      "buildCommand": "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\release\\x86_64\" opencv_jni_shared",
+      "abi": "x86_64",
+      "output": "C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\release\\x86_64\\libopencv_jni_shared.a",
+      "runtimeFiles": []
+    }
+  }
+}

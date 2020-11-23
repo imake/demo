@@ -16,6 +16,7 @@
 
 package com.faceDemo.activity;
 
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -106,14 +107,17 @@ public abstract class CameraActivity extends AppCompatActivity implements
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onPreviewFrame(final byte[] bytes, final Camera camera) {
+
         if (isProcessingFrame) {
             return;
         }
         isProcessingFrame = true;
         try {
             if (mNV21Bytes == null) {
-
-                Camera.Size previewSize = camera.getParameters().getPreviewSize();
+                Camera.Parameters parameters = camera.getParameters();
+                parameters.setPreviewFormat(ImageFormat.NV21);
+                camera.setParameters(parameters);
+                Camera.Size previewSize = parameters.getPreviewSize();
                 Log.d("previewSize", "onPreviewFrame: height="+previewSize.height+" width="+previewSize.width);
                 previewHeight = previewSize.height;
                 previewWidth = previewSize.width;

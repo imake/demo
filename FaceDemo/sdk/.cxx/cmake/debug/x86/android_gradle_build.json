@@ -1,0 +1,42 @@
+{
+  "stringTable": {
+    "0": "C:/PyTorchDemo/FaceDemo/sdk/.cxx/cmake/debug/x86",
+    "1": "--target=i686-none-linux-android21 --gcc-toolchain=C:/Users/007/AppData/Local/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/windows-x86_64 --sysroot=C:/Users/007/AppData/Local/Android/Sdk/ndk/21.3.6528147/toolchains/llvm/prebuilt/windows-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security -O0 -fno-limit-debug-info -fPIC"
+  },
+  "buildFiles": [
+    "C:\\PyTorchDemo\\FaceDemo\\sdk\\libcxx_helper\\CMakeLists.txt",
+    "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\ndk\\21.3.6528147\\build\\cmake\\android.toolchain.cmake",
+    "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\ndk\\21.3.6528147\\build\\cmake\\platforms.cmake"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\debug\\x86\" clean"
+  ],
+  "buildTargetsCommand": "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe  -C \"C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\debug\\x86\" {LIST_OF_TARGETS_TO_BUILD}",
+  "libraries": {
+    "opencv_jni_shared-Debug-x86": {
+      "buildCommand": "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\cmake\\3.10.2.4988404\\bin\\ninja.exe -C \"C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\debug\\x86\" opencv_jni_shared",
+      "buildType": "debug",
+      "toolchain": "2900177470",
+      "abi": "x86",
+      "artifactName": "opencv_jni_shared",
+      "files": [
+        {
+          "src": "C:\\PyTorchDemo\\FaceDemo\\sdk\\libcxx_helper\\dummy.cpp",
+          "flagsOrdinal": 1,
+          "workingDirectoryOrdinal": 0
+        }
+      ],
+      "headers": [],
+      "output": "C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\debug\\x86\\libopencv_jni_shared.a"
+    }
+  },
+  "toolchains": {
+    "2900177470": {
+      "cppCompilerExecutable": "C:\\Users\\007\\AppData\\Local\\Android\\Sdk\\ndk\\21.3.6528147\\toolchains\\llvm\\prebuilt\\windows-x86_64\\bin\\clang++.exe"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}
