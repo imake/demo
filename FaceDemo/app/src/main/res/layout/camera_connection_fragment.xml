@@ -53,6 +53,141 @@
           android:layout_width="480px"
           android:layout_height="640px" />
 
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="480px"
+        android:layout_height="640px"
+        android:text="显示时间"
+        android:layout_alignParentRight="true"
+        />
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="100dp"
+        android:layout_height="300dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/bt1"
+                    android:text="douyin-8"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt2"
+                    android:text="douyin-9"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt3"
+                    android:text="douyin-10"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt4"
+                    android:text="douyin-11"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt5"
+                    android:text="douyin-12"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt6"
+                    android:text="douyin-13"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt7"
+                    android:text="douyin-14"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt8"
+                    android:text="douyin-15"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt9"
+                    android:text="douyin-16"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+
+                <Button
+                    android:id="@+id/bt10"
+                    android:text="snapchat-8"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt11"
+                    android:text="snapchat-9"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt12"
+                    android:text="snapchat-10"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt13"
+                    android:text="snapchat-11"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt14"
+                    android:text="snapchat-12"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt15"
+                    android:text="snapchat-13"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt16"
+                    android:text="snapchat-14"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt17"
+                    android:text="snapchat-15"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+                <Button
+                    android:id="@+id/bt18"
+                    android:text="snapchat-16"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
 
   </RelativeLayout>
 

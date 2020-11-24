@@ -61,7 +61,7 @@ public class BitmapUtils {
         float[] floatStd = new float[]{(float) 0.5, (float) 0.5, (float) 0.5};
         // Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(_bitmap, floatMean, floatStd);
         final Tensor inputTensor =Tensor.fromBlob(data, new long[]{1,200,200,3});
-        Log.d("inputTensor", "PytorchFunction: inputTensor="+inputTensor);
+        //Log.d("inputTensor", "PytorchFunction: inputTensor="+inputTensor);
         final Module finalModule = module;
 
         long start_time = System.nanoTime();
