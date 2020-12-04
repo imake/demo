@@ -76,9 +76,21 @@ public class ClassifierActivity extends CameraActivity {
 
     private int pytorchUseSzie=200;
 
-    public static String FILE_NAME = "traced-model-permute.pt";
+    public static String FILE_NAME = "douyin-4.pt";
 
     private TextView timeTextView;
+
+    private Bitmap performBitmap=null;
+
+    private int width;
+    private int height;
+
+    private String time_1;
+    private String time_2;
+    private String time_3;
+    private String time_4;
+    private String time_5;
+    private String time_6;
 
     @Override
     protected int getLayoutId() {
@@ -173,8 +185,6 @@ public class ClassifierActivity extends CameraActivity {
                 TenginekitPoint middlePoint= new TenginekitPoint(((leftEye.X+rightEye.X)/2),((leftEye.Y+rightEye.Y)/2));
                // double eyeDis=Math.abs(Math.sqrt((leftEye.X-rightEye.X)*(leftEye.X-rightEye.X)+(leftEye.Y-rightEye.Y)*(leftEye.Y-rightEye.Y)));
 
-                //int dis=face_rect[0].right-face_rect[0].left;
-                //dis=AverRectDis(dis);
 
                 float dis = CheckDis(landmarks);
                 dis = AverRectDis(dis);
@@ -188,18 +198,11 @@ public class ClassifierActivity extends CameraActivity {
 
                 //Log.d("TenginekitPoint", "processImage: eyeDis="+dis+" bitmapWidth="+bitmapWidth+" yUp="+yUp+" yDown="+yDown+"  x="+ x+" y="+y+" middlePoint.x="+middlePoint.X+" middlePoint.y"+middlePoint.Y);
 
-                //OpenCV方法
-                //mNV21Bytes转Mat
-                //final Bitmap bitmap = BytetoBitmap(mNV21Bytes);
-                // Mat bitmapMat =new Mat();
-                //org.opencv.android.Utils.bitmapToMat(bitmap,bitmapMat);
-                //Log.d("bitmapMat", "bitmapMat: count="+bitmapMat.rows()+" channel="+bitmapMat.cols());
-
                 //边界处理
                 if (bitmapWidth>previewHeight)
                     bitmapWidth=previewHeight;
-                int width = (int) bitmapWidth;
-                int height = (int) bitmapWidth;
+                width = (int) bitmapWidth;
+                height = (int) bitmapWidth;
                 if (x+width>previewHeight)
                     x=previewHeight-width;
                 if (y+height>previewWidth)
@@ -209,6 +212,7 @@ public class ClassifierActivity extends CameraActivity {
                 if (y<0)
                     y=0;
 
+                //OpenCV方法
                 //YUV 转 Mat
                 long start_time_1 = System.nanoTime();
                 Mat mat = new Mat(480*3/2,640,CvType.CV_8UC1);//,byteBuffer 640,480
@@ -220,246 +224,136 @@ public class ClassifierActivity extends CameraActivity {
                 Core.flip(bitmapMat,bitmapMat,0);
                 Core.flip(bitmapMat,bitmapMat,1);
                 long end_time_1 = System.nanoTime();
-
-                String time_1=String.valueOf((end_time_1-start_time_1)/1000000.0);
-
-                /*
-                List<Mat> mv_0 = new ArrayList<Mat>();// 分离出来的彩色通道数据
-                Core.split(bitmapMat, mv_0);// 分离色彩通道
-                final Mat matNext = mv_0.get(3);
-                mv_0.remove(3);
-                Mat mat_0=new Mat(bitmapMat.size(),CvType.CV_8UC3);
-                Core.merge(mv_0,mat_0);
-
-                 */
+                time_1=String.valueOf((end_time_1-start_time_1)/1000000.0);
 
                 //旋转bitmapMat
-                long start_time_2 = System.nanoTime();
-                Mat rotateMat=RotateMat(bitmapMat, new Point(middlePoint.X,middlePoint.Y), faceLandmarkInfo.roll);
+                if (Math.abs(faceLandmarkInfo.roll)>=5) {
+                    long start_time_2 = System.nanoTime();
+                    Mat rotateMat = RotateMat(bitmapMat, new Point(middlePoint.X, middlePoint.Y), faceLandmarkInfo.roll);
 
-                //裁剪rotateMat
-                org.opencv.core.Rect rect=new org.opencv.core.Rect(x,y,width,height);
-                Mat scaleSmallMat=new Mat(rotateMat,rect);
+                    //裁剪rotateMat
+                    org.opencv.core.Rect rect=new org.opencv.core.Rect(x,y,width,height);
+                    Mat scaleSmallMat=new Mat(rotateMat,rect);
 
-                //缩小rectMat
-                org.opencv.core.Size dsize = new org.opencv.core.Size(pytorchUseSzie, pytorchUseSzie); // 设置新图片的大小
-                Imgproc.resize(scaleSmallMat, scaleSmallMat,dsize);//调用Imgproc的Resize方法，进行图片缩放
+                    //缩小rectMat
+                    org.opencv.core.Size dsize = new org.opencv.core.Size(pytorchUseSzie, pytorchUseSzie); // 设置新图片的大小
+                    Imgproc.resize(scaleSmallMat, scaleSmallMat,dsize);//调用Imgproc的Resize方法，进行图片缩放
 
-                //Log.d("scaleSmallMat", "processImage:scaleMat width="+scaleSmallMat.rows()+" height="+scaleSmallMat.cols()+" type="+scaleSmallMat.type());
+                    scaleSmallMat.convertTo(scaleSmallMat,CvType.CV_32FC3,2.0/255,-1);
+                    int size=(int)(scaleSmallMat.total()*3);
+                    float[] data=new float[size];
+                    scaleSmallMat.get(0,0,data);
+                    long end_time_2 = System.nanoTime();
+                    time_2=String.valueOf((end_time_2-start_time_2)/1000000.0);
 
+                    //Pytorch模型处理
+                    long start_time_3 = System.nanoTime();
+                    final float[] pyTorchData = BitmapUtils.PytorchFunction(mModule, this, data,pytorchUseSzie, pytorchUseSzie);
 
-                /*
-                //图片模型转换
-                List<Mat> mv = new ArrayList<Mat>();// 分离出来的彩色通道数据
-                Core.split(scaleSmallMat, mv);// 分离色彩通道
-                List<Mat> mv3=new ArrayList<Mat>();
-                mv3.add(mv.get(0));
-                mv3.add(mv.get(1));
-                mv3.add(mv.get(2));
-                Mat dest=new Mat();
-                Core.merge(mv3, dest);// 合并split()方法分离出来的彩色通道数据
+                    Mat pyTorchScaleOriginalMat=new Mat(pytorchUseSzie,pytorchUseSzie,CvType.CV_32FC3);
+                    pyTorchScaleOriginalMat.put(0,0,pyTorchData);
 
-                 */
+                    pyTorchScaleOriginalMat.convertTo(pyTorchScaleOriginalMat,CvType.CV_8UC3,255.0/2,255.0/2);
+                    long end_time_3 = System.nanoTime();
+                    time_3=String.valueOf((end_time_3-start_time_3)/1000000.0);
 
-                scaleSmallMat.convertTo(scaleSmallMat,CvType.CV_32FC3,2.0/255,-1);
-                int size=(int)(scaleSmallMat.total()*3);
-                float[] data=new float[size];
-                scaleSmallMat.get(0,0,data);
-                long end_time_2 = System.nanoTime();
-                String time_2=String.valueOf((end_time_2-start_time_2)/1000000.0);
+                    //读取透明模板图
+                    long start_time_4 = System.nanoTime();
+                    //读取透明模板图
+                    Mat srclMat = LoadMaskMat();
+                    long end_time_4 = System.nanoTime();
+                    time_4=String.valueOf((end_time_4-start_time_4)/1000000.0);
+                    //Log.d("Imgcodecs", "Imgcodecs: srclMat="+srclMat.size()+" channels="+srclMat.channels());
 
-                /*
-                Mat a1=mv.get(0);
-                Mat a2=mv.get(1);
-                Mat a3=mv.get(2);
-                a1.convertTo(a1,CvType.CV_32F,2.0/255,-1);
-                a2.convertTo(a2,CvType.CV_32F,2.0/255,-1);
-                a3.convertTo(a3,CvType.CV_32F,2.0/255,-1);
-                int size1=(int)(a1.total());
-                float[] data1=new float[size1];
-                a1.get(0,0,data1);
-                int size2=(int)(a1.total());
-                float[] data2=new float[size2];
-                a2.get(0,0,data2);
-                int size3=(int)(a2.total());
-                float[] data3=new float[size3];
-                a3.get(0,0,data3);
+                    //转换后的图片放回原大小
+                    long start_time_5 = System.nanoTime();
+                    org.opencv.core.Size pyTorchOriginalSize = new org.opencv.core.Size(width, height); // 设置新图片的大小
+                    Imgproc.resize(pyTorchScaleOriginalMat, pyTorchScaleOriginalMat,pyTorchOriginalSize);//调用Imgproc的Resize方法，进行图片缩放
 
-                float[] data4=new float[size1+size2+size3];
+                    // Log.d("scaleOriginalMat", "processImage: scaleOriginalMat.width="+scaleOriginalMat.width()+" height="+scaleOriginalMat.height());
 
-                for (int i=0;i<data1.length;i++)
-                {
-                    data4[i]=data1[i];
+                    //将模型转换后的头部图片合并到rotateMat上
+                    org.opencv.core.Rect rec = new org.opencv.core.Rect(x,y, pyTorchScaleOriginalMat.cols(), pyTorchScaleOriginalMat.rows());
+                    Mat mat1Sub=rotateMat.submat(rec);
+                    pyTorchScaleOriginalMat.copyTo(mat1Sub);
+                    long end_time_5 = System.nanoTime();
+                    time_5=String.valueOf((end_time_5-start_time_5)/1000000.0);
+
+                    //最后一步
+                    //在rotateMat上创建mask掩码
+                    long start_time_6 = System.nanoTime();
+                    Mat mask = Mat.zeros(rotateMat.rows(), rotateMat.cols(), CvType.CV_8UC3);
+                    int cx = x;
+                    int cy = y;
+                    org.opencv.core.Rect maskRect=new org.opencv.core.Rect(cx,cy,width,height);
+                    Mat mat1SubA=mask.submat(maskRect);
+                    srclMat.copyTo(mat1SubA);
+                    //Log.d("mask", "mask: mask="+mask.size()+" channels="+mask.channels());
+
+                    //对mask掩码旋转
+                    Mat rotateMask=RotateMat(mask,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
+
+                    //在把rotateMat旋转回正
+                    Mat ratoteOriginalMat=RotateMat(rotateMat,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
+
+                    //融合
+                    Mat blendMat = BlendMat(ratoteOriginalMat,bitmapMat,rotateMask);
+
+                    long end_time_6 = System.nanoTime();
+                    time_6=String.valueOf((end_time_6-start_time_6)/1000000.0);
+                    //测试
+                    //final Bitmap TTT=Bitmap.createBitmap(allMat.cols(),allMat.rows(), Bitmap.Config.ARGB_8888);
+                    //org.opencv.android.Utils.matToBitmap(allMat,TTT);
+
+                    performBitmap=Bitmap.createBitmap(blendMat.cols(),blendMat.rows(), Bitmap.Config.ARGB_8888);
+                    org.opencv.android.Utils.matToBitmap(blendMat,performBitmap);
                 }
-                for (int i=0;i<data2.length;i++)
+                else
                 {
-                    data4[i+data1.length]=data2[i];
+                    //裁剪rotateMat
+                    org.opencv.core.Rect rect=new org.opencv.core.Rect(x,y,width,height);
+                    Mat rectMat=new Mat(bitmapMat,rect);
+
+                    //缩小rectMat
+                    Mat scaleSmallMat=new Mat();
+                    org.opencv.core.Size dsize = new org.opencv.core.Size(pytorchUseSzie, pytorchUseSzie); // 设置新图片的大小
+                    Imgproc.resize(rectMat, scaleSmallMat,dsize);//调用Imgproc的Resize方法，进行图片缩放
+
+                    scaleSmallMat.convertTo(scaleSmallMat,CvType.CV_32FC3,2.0/255,-1);
+                    int size=(int)(scaleSmallMat.total()*3);
+                    float[] data=new float[size];
+                    scaleSmallMat.get(0,0,data);
+
+                    //Pytorch模型处理
+                    final float[] pyTorchData = BitmapUtils.PytorchFunction(mModule, this, data,pytorchUseSzie, pytorchUseSzie);
+
+                    Mat pyTorchScaleOriginalMat=new Mat(pytorchUseSzie,pytorchUseSzie,CvType.CV_32FC3);
+                    pyTorchScaleOriginalMat.put(0,0,pyTorchData);
+
+                    pyTorchScaleOriginalMat.convertTo(pyTorchScaleOriginalMat,CvType.CV_8UC3,255.0/2,255.0/2);
+
+                    //读取透明模板图
+                    Mat srclMat = LoadMaskMat();
+
+                    //转换后的图片放回原大小
+                    org.opencv.core.Size pyTorchOriginalSize = new org.opencv.core.Size(width, height); // 设置新图片的大小
+                    Imgproc.resize(pyTorchScaleOriginalMat, pyTorchScaleOriginalMat,pyTorchOriginalSize);//调用Imgproc的Resize方法，进行图片缩放
+
+                    //融合
+                    Mat blendMat = BlendMat(pyTorchScaleOriginalMat,rectMat,srclMat);
+
+                    //将模型转换后的头部图片合并到bitmapMat上
+                    org.opencv.core.Rect rec = new org.opencv.core.Rect(x,y, blendMat.cols(), blendMat.rows());
+                    Mat mat1Sub=bitmapMat.submat(rec);
+                    blendMat.copyTo(mat1Sub);
+
+                    performBitmap=Bitmap.createBitmap(bitmapMat.cols(),bitmapMat.rows(), Bitmap.Config.ARGB_8888);
+                    org.opencv.android.Utils.matToBitmap(bitmapMat,performBitmap);
                 }
-                for (int i=0;i<data3.length;i++)
-                {
-                    data4[i+data1.length+data2.length]=data3[i];
-                }
-                 */
-
-                //Pytorch模型处理
-                long start_time_3 = System.nanoTime();
-                final float[] pyTorchData = BitmapUtils.PytorchFunction(mModule, this, data,pytorchUseSzie, pytorchUseSzie);
-
-                /*
-                int dataSize=pytorchUseSzie*pytorchUseSzie;
-                float[] data11=new float[dataSize];
-                float[] data22=new float[dataSize];
-                float[] data33=new float[dataSize];
-
-                float[] data44=new float[dataSize*3];
-
-                for (int i=0;i<dataSize;i++)
-                {
-                    int j=i*3;
-                    data44[j]=pyTorchData[i];
-                    data44[j+1]=pyTorchData[i+dataSize];
-                    data44[j+2]=pyTorchData[i+dataSize*2];
-                }
-
-                 */
-
-                Mat pyTorchScaleOriginalMat=new Mat(pytorchUseSzie,pytorchUseSzie,CvType.CV_32FC3);
-                pyTorchScaleOriginalMat.put(0,0,pyTorchData);
-
-                pyTorchScaleOriginalMat.convertTo(pyTorchScaleOriginalMat,CvType.CV_8UC3,255.0/2,255.0/2);
-                long end_time_3 = System.nanoTime();
-                String time_3=String.valueOf((end_time_3-start_time_3)/1000000.0);
-
-//                List<Mat> mv1 = new ArrayList<Mat>();// 分离出来的彩色通道数据
-//                Core.split(pyTorchMat, mv1);// 分离色彩通道
-//                mv1.add(mv.get(3));
-                //Mat dest1 = new Mat(200,200,CvType.CV_8UC4);
-                //Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
-                //Core.merge(mv1, dest1);// 合并split()方法分离出来的彩色通道数据
-//                Log.d("dest1", "processImage: mv="+mv1.size()+" pyTorchMat="+dest1.channels());
-
-                //读取透明模板图
-                long start_time_4 = System.nanoTime();
-                final String pngFileAbsoluteFilePath = new File(
-                        Utils.assetFilePath(this, getPngAssetName())).getAbsolutePath();
-                Mat srclMat = Imgcodecs.imread(pngFileAbsoluteFilePath,Imgcodecs.IMREAD_UNCHANGED);
-                org.opencv.core.Size srcSize = new org.opencv.core.Size(width, width); // 设置新图片的大小
-                Imgproc.resize(srclMat, srclMat,srcSize);//调用Imgproc的Resize方法，进行图片缩放
-                long end_time_4 = System.nanoTime();
-                String time_4=String.valueOf((end_time_4-start_time_4)/1000000.0);
-                //Log.d("Imgcodecs", "Imgcodecs: srclMat="+srclMat.size()+" channels="+srclMat.channels());
-
-                //转换后的图片放回原大小
-                long start_time_5 = System.nanoTime();
-                org.opencv.core.Size pyTorchOriginalSize = new org.opencv.core.Size(width, height); // 设置新图片的大小
-                Imgproc.resize(pyTorchScaleOriginalMat, pyTorchScaleOriginalMat,pyTorchOriginalSize);//调用Imgproc的Resize方法，进行图片缩放
-
-                // Log.d("scaleOriginalMat", "processImage: scaleOriginalMat.width="+scaleOriginalMat.width()+" height="+scaleOriginalMat.height());
-
-                //将模型转换后的头部图片合并到rotateMat上
-                org.opencv.core.Rect rec = new org.opencv.core.Rect(x,y, pyTorchScaleOriginalMat.cols(), pyTorchScaleOriginalMat.rows());
-                Mat mat1Sub=rotateMat.submat(rec);
-                pyTorchScaleOriginalMat.copyTo(mat1Sub);
-                long end_time_5 = System.nanoTime();
-                String time_5=String.valueOf((end_time_5-start_time_5)/1000000.0);
-
-                //最后一步
-                //在rotateMat上创建mask掩码
-                long start_time_6 = System.nanoTime();
-                Mat mask = Mat.zeros(rotateMat.rows(), rotateMat.cols(), CvType.CV_8UC3);
-                int cx = x;
-                int cy = y;
-                org.opencv.core.Rect maskRect=new org.opencv.core.Rect(cx,cy,width,height);
-                Mat mat1SubA=mask.submat(maskRect);
-                srclMat.copyTo(mat1SubA);
-                //Log.d("mask", "mask: mask="+mask.size()+" channels="+mask.channels());
-
-                //对mask掩码旋转
-                Mat rotateMask=RotateMat(mask,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
-
-                //在把rotateMat旋转回正
-                Mat ratoteOriginalMat=RotateMat(rotateMat,new Point(middlePoint.X,middlePoint.Y),-faceLandmarkInfo.roll);
-
-                rotateMask.convertTo(rotateMask,CvType.CV_32FC3,1.0/255,0);
-                ratoteOriginalMat.convertTo(ratoteOriginalMat,CvType.CV_32FC3,1.0/255,0);
-                Mat mat9999=new Mat(ratoteOriginalMat.size(),CvType.CV_32FC3);
-                Core.multiply(rotateMask,ratoteOriginalMat,mat9999);
-
-                Mat matInvMask=new Mat(bitmapMat.size(), CvType.CV_32FC3,new Scalar(1.0,1.0,1.0));
-                Mat matInvMask_0 = new Mat(bitmapMat.size(), CvType.CV_32FC3);
-                Core.subtract(matInvMask,rotateMask,matInvMask_0);
-                bitmapMat.convertTo(bitmapMat,CvType.CV_32FC3,1.0/255,0);
-                Mat mat8888=new Mat(bitmapMat.size(),CvType.CV_32FC3);
-                Core.multiply(matInvMask_0,bitmapMat,mat8888);
-
-                Mat allMat=new Mat(bitmapMat.size(),CvType.CV_32FC3);
-                Core.add(mat9999,mat8888,allMat);
-                allMat.convertTo(allMat,CvType.CV_8UC3,255.0,0);
-                long end_time_6 = System.nanoTime();
-                String time_6=String.valueOf((end_time_6-start_time_6)/1000000.0);
-                //测试
-                //final Bitmap TTT=Bitmap.createBitmap(allMat.cols(),allMat.rows(), Bitmap.Config.ARGB_8888);
-                //org.opencv.android.Utils.matToBitmap(allMat,TTT);
-
-                //把矩阵复制到另一个矩阵中（mask为操作掩码。它的非零元素表示矩阵中某个要被复制）
-                //ratoteOriginalMat.copyTo( bitmapMat, rotateMask );
-
-
-                final Bitmap AAA=Bitmap.createBitmap(allMat.cols(),allMat.rows(), Bitmap.Config.ARGB_8888);
-                org.opencv.android.Utils.matToBitmap(allMat,AAA);
 
                 long end_time_7 = System.nanoTime();
                 String time_7=String.valueOf((end_time_7-start_time_1)/1000000.0);
 
-
-                /*
-                //Bitmap方法
-                //btye[]转Bitmap
-                final Bitmap bitmap = BytetoBitmap(mNV21Bytes);
-
-                if (bitmapWidth>bitmap.getWidth())
-                    bitmapWidth=bitmap.getWidth();
-
-                int width = (int) bitmapWidth;
-                int height = (int) bitmapWidth;
-                int[] pixels = new int[width * height];
-
-
-                if (x+width>bitmap.getWidth())
-                    x=bitmap.getWidth()-width;
-                if (y+height>bitmap.getHeight())
-                    y=bitmap.getHeight()-height;
-                if (x<0)
-                    x=0;
-                if (y<0)
-                    y=0;
-
-                final Bitmap bigBitmap = GetResizedBitmap(bitmap);
-                Log.d("bigBitmap", "processImage: bigBitmap="+bigBitmap.getWidth()+" "+bigBitmap.getHeight());
-                //整个图片旋转faceLandmarkInfo.roll
-                final Bitmap bitmapTemp = BitmapMatricRotate(bigBitmap,faceLandmarkInfo.roll, middlePoint.X+240,middlePoint.Y+320);
-                    //截图
-                bitmapTemp.getPixels(pixels, 0, width, x+240, y+320, width, height);
-                final Bitmap dest = Bitmap.createBitmap(pixels, width, height, bitmapTemp.getConfig());
-
-                //图片模型转换
-                Bitmap pyTorchBitmap = BitmapUtils.PytorchFunction(mModule, this, dest, 200, 200);
-
-                //转换后的图片缩放回原大小
-                final Bitmap scaleBitmap = BitmapUtils.scaleBitmap(pyTorchBitmap, width, height);
-
-                //图片合并
-                final Bitmap mergeBitmap = BitmapUtils.mergeBitmap(bitmapTemp, scaleBitmap, x+240, y+320);
-
-                //整个图片旋转复原
-                final Bitmap rotateMergeBitmap=BitmapMatricRotate(mergeBitmap,-faceLandmarkInfo.roll, middlePoint.X+240,middlePoint.Y+320);
-
-                //截图
-                int[] newPixels = new int[480 * 640];
-                rotateMergeBitmap.getPixels(newPixels, 0, 480, 240, 320, 480, 640);
-                final Bitmap newBitmap = Bitmap.createBitmap(newPixels, 480, 640, rotateMergeBitmap.getConfig());
-
-                 */
                 if (timeTextView==null)
                 {
                     timeTextView=findViewById(R.id.timeText);
@@ -490,7 +384,7 @@ public class ClassifierActivity extends CameraActivity {
 
                 bigBgView.post(new Runnable() {
                     @Override
-                    public void run() { bigBgView.setImageBitmap((AAA));
+                    public void run() { bigBgView.setImageBitmap((performBitmap));
                     }
                 });
 
@@ -518,6 +412,39 @@ public class ClassifierActivity extends CameraActivity {
         });
     }
 
+    private Mat LoadMaskMat()
+    {
+        //读取透明模板图
+        final String pngFileAbsoluteFilePath = new File(
+                Utils.assetFilePath(this, getPngAssetName())).getAbsolutePath();
+        Mat srclMat = Imgcodecs.imread(pngFileAbsoluteFilePath,Imgcodecs.IMREAD_UNCHANGED);
+        org.opencv.core.Size srcSize = new org.opencv.core.Size(width, width); // 设置新图片的大小
+        Imgproc.resize(srclMat, srclMat,srcSize);//调用Imgproc的Resize方法，进行图片缩放
+        //Log.d("Imgcodecs", "Imgcodecs: srclMat="+srclMat.size()+" channels="+srclMat.channels());
+        return srclMat;
+    }
+
+    private Mat BlendMat(Mat mat_1,Mat mat_2,Mat mask)
+    {
+        mask.convertTo(mask,CvType.CV_32FC3,1.0/255,0);
+        mat_1.convertTo(mat_1,CvType.CV_32FC3,1.0/255,0);
+        Mat mat9999=new Mat(mat_1.size(),CvType.CV_32FC3);
+        Core.multiply(mask,mat_1,mat9999);
+
+        Mat matInvMask=new Mat(mat_2.size(), CvType.CV_32FC3,new Scalar(1.0,1.0,1.0));
+        Mat matInvMask_0 = new Mat(mat_2.size(), CvType.CV_32FC3);
+        Core.subtract(matInvMask,mask,matInvMask_0);
+        mat_2.convertTo(mat_2,CvType.CV_32FC3,1.0/255,0);
+        Mat mat8888=new Mat(mat_2.size(),CvType.CV_32FC3);
+        Core.multiply(matInvMask_0,mat_2,mat8888);
+
+        Mat allMat=new Mat(mat_2.size(),CvType.CV_32FC3);
+        Core.add(mat9999,mat8888,allMat);
+        allMat.convertTo(allMat,CvType.CV_8UC3,255.0,0);
+
+        return allMat;
+    }
+
     protected Bitmap BytetoBitmap(byte[] mNv21Bytes)
     {
         Bitmap bitmap=null;
@@ -535,7 +462,7 @@ public class ClassifierActivity extends CameraActivity {
         final String moduleAssetNameFromIntent = FILE_NAME;
         mModuleAssetName = !TextUtils.isEmpty(moduleAssetNameFromIntent)
                 ? moduleAssetNameFromIntent
-                : "douyin-8.pt";
+                : "douyin-4.pt";
 
         return mModuleAssetName;
     }

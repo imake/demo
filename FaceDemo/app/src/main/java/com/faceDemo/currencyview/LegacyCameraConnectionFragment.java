@@ -132,21 +132,21 @@ public class LegacyCameraConnectionFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ClassifierActivity.FILE_NAME = "douyin-8.pt";
+                ClassifierActivity.FILE_NAME = "douyin-4.pt";
             }
         });
 
         view.findViewById(R.id.bt2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "douyin-9.pt";
+                ClassifierActivity.FILE_NAME = "douyin-5.pt";
             }
         });
 
         view.findViewById(R.id.bt3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "douyin-10.pt";
+                ClassifierActivity.FILE_NAME = "douyin-6.pt";
             }
         });
 
@@ -154,21 +154,21 @@ public class LegacyCameraConnectionFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ClassifierActivity.FILE_NAME = "douyin-11.pt";
+                ClassifierActivity.FILE_NAME = "douyin-7.pt";
             }
         });
 
         view.findViewById(R.id.bt5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "douyin-12.pt";
+                ClassifierActivity.FILE_NAME = "douyin-8.pt";
             }
         });
 
         view.findViewById(R.id.bt6).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "douyin-13.pt";
+                ClassifierActivity.FILE_NAME = "douyin-9.pt";
             }
         });
 
@@ -176,81 +176,53 @@ public class LegacyCameraConnectionFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                ClassifierActivity.FILE_NAME = "douyin-14.pt";
+                ClassifierActivity.FILE_NAME = "douyin-10.pt";
             }
         });
 
         view.findViewById(R.id.bt8).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "douyin-15.pt";
+                ClassifierActivity.FILE_NAME = "douyin-11.pt";
             }
         });
 
         view.findViewById(R.id.bt9).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "douyin-16.pt";
+                ClassifierActivity.FILE_NAME = "douyin-12.pt";
             }
         });
 
         view.findViewById(R.id.bt10).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-8.pt";
+                ClassifierActivity.FILE_NAME = "douyin-13.pt";
             }
         });
 
         view.findViewById(R.id.bt11).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-9.pt";
+                ClassifierActivity.FILE_NAME = "douyin-14.pt";
             }
         });
 
         view.findViewById(R.id.bt12).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-10.pt";
+                ClassifierActivity.FILE_NAME = "douyin-15.pt";
             }
         });
 
         view.findViewById(R.id.bt13).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-11.pt";
+                ClassifierActivity.FILE_NAME = "douyin-16.pt";
             }
         });
 
         view.findViewById(R.id.bt14).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-12.pt";
-            }
-        });
-
-        view.findViewById(R.id.bt15).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-13.pt";
-            }
-        });
-
-        view.findViewById(R.id.bt16).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-14.pt";
-            }
-        });
-
-        view.findViewById(R.id.bt17).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClassifierActivity.FILE_NAME = "snapchat-15.pt";
-            }
-        });
-
-        view.findViewById(R.id.bt18).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClassifierActivity.FILE_NAME = "snapchat-16.pt";

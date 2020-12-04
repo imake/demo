@@ -172,7 +172,6 @@
       "project": {
         "compilerSettingsCacheFolder": "C:\\PyTorchDemo\\FaceDemo\\.cxx",
         "cxxFolder": "C:\\PyTorchDemo\\FaceDemo\\.cxx",
-        "ideBuildTargetAbi": "arm64-v8a,armeabi-v7a,armeabi",
         "isBuildOnlyTargetAbiEnabled": true,
         "isCmakeBuildCohabitationEnabled": false,
         "isNativeCompilerSettingsCacheEnabled": false,
@@ -196,7 +195,10 @@
     "objFolder": "C:\\PyTorchDemo\\FaceDemo\\sdk\\build\\intermediates\\cmake\\debug\\obj",
     "variantName": "debug",
     "validAbiList": [
-      "ARM64_V8A"
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
     ],
     "prefabDirectory": "C:\\PyTorchDemo\\FaceDemo\\sdk\\.cxx\\cmake\\debug\\prefab",
     "prefabPackageDirectoryList": []
