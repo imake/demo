@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+ Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.faceDemo.currencyview.AutoFitTextureView
+          android:id="@+id/texture"
+          android:layout_width="480px"
+          android:layout_height="640px"
+        />
+
+
+    <ImageView
+        android:id="@+id/bigBitmapview"
+        android:layout_width="480px"
+        android:layout_height="640px"
+        android:layout_alignParentRight="true"
+        />
+
+    <ImageView
+        android:id="@+id/bigBgview"
+        android:layout_width="960px"
+        android:layout_height="1280px"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="46dp" />
+
+
+    <ImageView
+        android:id="@+id/mergeview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="-1dp"
+        android:layout_marginBottom="0dp" />
+
+    <com.faceDemo.currencyview.OverlayView
+          android:id="@+id/facing_overlay"
+          android:layout_width="480px"
+          android:layout_height="640px" />
+
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="480px"
+        android:layout_height="640px"
+        android:text="显示时间"
+        android:layout_alignParentRight="true"
+        />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="250dp"
+        android:background="@android:color/black"
+        android:max="255"
+        android:min="0"
+        android:progress="128" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="310dp"
+        android:layout_marginTop="250dp"
+        android:text="128" />
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="100dp"
+        android:elevation="10dp"
+        android:layout_height="300dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/bt1"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="matting-1" />
+
+                <Button
+                    android:id="@+id/bt2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="matting-2" />
+
+                <Button
+                    android:id="@+id/bt3"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="matting-3" />
+
+                <Button
+                    android:id="@+id/bt4"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="MATTING-4" />
+
+                <Button
+                    android:id="@+id/bt5"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="MATTING-5" />
+
+                <Button
+                    android:id="@+id/bt6"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="MATTING-6" />
+
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+
+
