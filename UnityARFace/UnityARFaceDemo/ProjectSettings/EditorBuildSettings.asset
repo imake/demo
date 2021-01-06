@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Scene/Start.unity
+    guid: c172be6d2b4ca44c484719eb253cbc81
+  - enabled: 1
+    path: Assets/Scenes/Scene/ARFaceBlendShapesScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Scene/UnityShowScene.unity
+    guid: ae50a5de36d51419b9c6280c6eeb4bb4
+  - enabled: 1
+    path: Assets/Scenes/Scene/TextureBlendScene.unity
+    guid: fc7b5808b3b614c59bee1d41d9d24455
+  m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 0041fe49463d7433fb207b0b88c4d574,
+      type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 152b5e751ca9a489da59c8093a8f0039,
+      type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bfc46a0793d774560b09e87994267ebe,
+      type: 2}

@@ -1,0 +1,65 @@
+﻿<Properties StartupConfiguration="{39104F5B-1499-8210-B6E1-0B640CF3249E}|">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameFramework/TextureBlendSceneFramework.cs">
+    <Files>
+      <File FileName="Assets/Scripts/SDK/SDKHandler.cs" Line="102" Column="57" />
+      <File FileName="Assets/Scripts/AR/ARCameraBackgroundRewrite.cs" />
+      <File FileName="Assets/Scripts/Utility/TextureUtility.cs" />
+      <File FileName="Assets/Scripts/GameFramework/TextureBlendSceneFramework.cs" Line="144" Column="47" />
+      <File FileName="Assets/Scripts/GameFramework/GameFramework.cs" />
+      <File FileName="Assets/Scripts/Singleton/SingletonMono.cs" />
+      <File FileName="Assets/Scripts/AR/ARKitBlendShapeVisualizer.cs" />
+      <File FileName="Assets/Plugins/Unity-Logs-Viewer/Reporter/Reporter.cs" />
+      <File FileName="Assets/Plugins/Unity-Logs-Viewer/Reporter/Editor/ReporterEditor.cs" />
+      <File FileName="Assets/Scripts/Test.cs" />
+      <File FileName="Assets/Scripts/Utility/Utility.cs" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="UnityARFaceDemo" expanded="True">
+            <Node name="Assets" expanded="True">
+              <Node name="AutoCreator" expanded="True">
+                <Node name="ModuleMgr" expanded="True" />
+              </Node>
+              <Node name="Plugins" expanded="True">
+                <Node name="Unity-Logs-Viewer" expanded="True">
+                  <Node name="Reporter" expanded="True">
+                    <Node name="Editor" expanded="True" />
+                  </Node>
+                </Node>
+              </Node>
+              <Node name="Scripts" expanded="True">
+                <Node name="AR" expanded="True" />
+                <Node name="Const" expanded="True" />
+                <Node name="GameFramework" expanded="True">
+                  <Node name="TextureBlendSceneFramework.cs" selected="True" />
+                </Node>
+                <Node name="Manager" expanded="True">
+                  <Node name="AudioManager" expanded="True" />
+                  <Node name="ModuleManager" expanded="True" />
+                </Node>
+                <Node name="ResourceManager" expanded="True">
+                  <Node name="FileManager" expanded="True" />
+                  <Node name="ProtobufSerializer" expanded="True" />
+                </Node>
+                <Node name="SDK" expanded="True" />
+                <Node name="Singleton" expanded="True" />
+                <Node name="UI" expanded="True">
+                  <Node name="BaseUI" expanded="True" />
+                </Node>
+                <Node name="Utility" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.Assembly-CSharp PreferredExecutionTarget="079a95dd-a224-4ad4-b0b8-cad679cfd5c9" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
