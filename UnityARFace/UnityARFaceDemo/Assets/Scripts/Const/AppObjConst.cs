@@ -17,6 +17,6 @@ public static class AppObjConst
     public const string GamePlayGoName = "[GamePlayWorld]";
     public static GameObject GamePlayGo;
 
-    public const string GamePlayPropGOName = "[Prop]";
-    public static GameObject GamePlayPropGO;
+    public const string GamePlayObstacleGOName = "[Obstacle]";
+    public static GameObject GamePlayObstacleGO;
 }

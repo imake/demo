@@ -266,6 +266,9 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Assets/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Assets/Plugins/JsonDotNet/Assemblies/Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
     </Reference>

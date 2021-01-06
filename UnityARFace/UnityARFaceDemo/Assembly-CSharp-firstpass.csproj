@@ -1735,8 +1735,10 @@
     <Compile Include="Assets\Plugins\protobuf-net\obj\Debug\TemporaryGeneratedFile_5937a670-0e60-4077-877b-f7221da3dda1.cs" />
     <Compile Include="Assets\Plugins\protobuf-net\obj\Debug\TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10BC5D3.cs" />
     <None Include="Assets\Plugins\Best HTTP (Pro)\ver@1.11.0.txt" />
+    <None Include="Assets\Plugins\JsonDotNet\ver@2.0.1.txt" />
     <None Include="Assets\Plugins\Best HTTP (Pro)\license.txt" />
     <None Include="Assets\Plugins\protobuf-net\Web\TODO.txt" />
+    <None Include="Assets\Plugins\JsonDotNet\link.xml" />
     <None Include="Assets\Plugins\Best HTTP (Pro)\link_android_subset.xml" />
     <None Include="Assets\Plugins\Unity-Logs-Viewer\ver@1.7.txt" />
     <None Include="Assets\Plugins\Best HTTP (Pro)\BestHTTP\SecureProtocol\License.txt" />
@@ -1921,6 +1923,9 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Assets/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Assets/Plugins/JsonDotNet/Assemblies/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>/Applications/Unity/Hub/Editor/2019.4.15f1c1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

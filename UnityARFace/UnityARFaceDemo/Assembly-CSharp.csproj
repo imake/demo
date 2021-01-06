@@ -70,20 +70,40 @@
     <Compile Include="Assets\AutoCreator\ModuleMgr\UICtrlConst_AutoCreator.cs" />
     <Compile Include="Assets\Scripts\AR\ARCameraBackgroundRewrite.cs" />
     <Compile Include="Assets\Scripts\AR\ARKitBlendShapeVisualizer.cs" />
+    <Compile Include="Assets\Scripts\App\AppProjectInfo.cs" />
+    <Compile Include="Assets\Scripts\App\Component\Event\Listener\ClickListener.cs" />
+    <Compile Include="Assets\Scripts\App\Component\Event\Listener\DragListener.cs" />
+    <Compile Include="Assets\Scripts\App\Component\Event\Listener\EventListener.cs" />
+    <Compile Include="Assets\Scripts\App\Dispatcher\Base\BaseDispatcher.cs" />
+    <Compile Include="Assets\Scripts\App\Dispatcher\Ctrl\CtrlDispatcher.cs" />
+    <Compile Include="Assets\Scripts\App\Dispatcher\Model\ModelDispatcher.cs" />
+    <Compile Include="Assets\Scripts\App\Dispatcher\UI\UICtrlDispatcher.cs" />
+    <Compile Include="Assets\Scripts\App\Dispatcher\WSNet\WSNetDispatcher.cs" />
+    <Compile Include="Assets\Scripts\App\Global\AppGlobal.cs" />
+    <Compile Include="Assets\Scripts\App\Manager\AudioManager\AudioManager.cs" />
+    <Compile Include="Assets\Scripts\App\Manager\ModuleManager\ModuleManager.cs" />
+    <Compile Include="Assets\Scripts\App\Manager\UIManager\UIManager.cs" />
+    <Compile Include="Assets\Scripts\App\Manager\WSNetMgr\WSNetMgr.cs" />
+    <Compile Include="Assets\Scripts\App\Pool\ObjectItem.cs" />
+    <Compile Include="Assets\Scripts\App\Pool\PoolItem.cs" />
+    <Compile Include="Assets\Scripts\App\Pool\PoolManager.cs" />
+    <Compile Include="Assets\Scripts\App\UI\BaseUI\BaseCtrl.cs" />
+    <Compile Include="Assets\Scripts\App\UI\BaseUI\BaseModel.cs" />
+    <Compile Include="Assets\Scripts\App\UI\BaseUI\BaseUI.cs" />
+    <Compile Include="Assets\Scripts\App\UI\BaseUI\BaseUICtrl.cs" />
     <Compile Include="Assets\Scripts\AssetBundle\AssetBundleConfig.cs" />
     <Compile Include="Assets\Scripts\AssetBundle\AssetBundleNode.cs" />
+    <Compile Include="Assets\Scripts\Const\AppConst.cs" />
+    <Compile Include="Assets\Scripts\Const\AppDataConst.cs" />
     <Compile Include="Assets\Scripts\Const\AppObjConst.cs" />
+    <Compile Include="Assets\Scripts\Const\EncryptConst.cs" />
+    <Compile Include="Assets\Scripts\Const\GameConst.cs" />
+    <Compile Include="Assets\Scripts\Const\NetConst.cs" />
     <Compile Include="Assets\Scripts\Const\PrefabPathConst.cs" />
     <Compile Include="Assets\Scripts\Const\PrefsKeyConst.cs" />
-    <Compile Include="Assets\Scripts\Dispatcher\Base\BaseDispatcher.cs" />
-    <Compile Include="Assets\Scripts\Dispatcher\Ctrl\CtrlDispatcher.cs" />
-    <Compile Include="Assets\Scripts\Dispatcher\Model\ModelDispatcher.cs" />
-    <Compile Include="Assets\Scripts\Dispatcher\UI\UICtrlDispatcher.cs" />
+    <Compile Include="Assets\Scripts\Const\UIPrefabPathConst.cs" />
     <Compile Include="Assets\Scripts\GameFramework\GameFramework.cs" />
     <Compile Include="Assets\Scripts\GameFramework\TextureBlendSceneFramework.cs" />
-    <Compile Include="Assets\Scripts\Manager\AudioManager\AudioManager.cs" />
-    <Compile Include="Assets\Scripts\Manager\ModuleManager\ModuleManager.cs" />
-    <Compile Include="Assets\Scripts\Manager\UIManager\UIManager.cs" />
     <Compile Include="Assets\Scripts\ResourceManager\BinaryObject.cs" />
     <Compile Include="Assets\Scripts\ResourceManager\FileManager\FileManager.cs" />
     <Compile Include="Assets\Scripts\ResourceManager\ProtobufSerializer\ProtobufSerializer.cs" />
@@ -101,19 +121,31 @@
     <Compile Include="Assets\Scripts\Singleton\Singleton.cs" />
     <Compile Include="Assets\Scripts\Singleton\SingletonMono.cs" />
     <Compile Include="Assets\Scripts\Singleton\StringExtension.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\BattleDataMgr.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\Const\GameConst.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\Const\PrefabPathConst.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\Const\UIPrefabPathConst.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\CreateManager.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\GamePlayWorld.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\SubmarineBattleFramework.cs" />
+    <Compile Include="Assets\Scripts\SubmarineBattle\TomatoMonoComponent.cs" />
     <Compile Include="Assets\Scripts\Test.cs" />
+    <Compile Include="Assets\Scripts\TextureUtility.cs" />
     <Compile Include="Assets\Scripts\Timer\Timer\HeavyTimer.cs" />
     <Compile Include="Assets\Scripts\Timer\Timer\SimpleTimer.cs" />
     <Compile Include="Assets\Scripts\Timer\Timer\Timer.cs" />
     <Compile Include="Assets\Scripts\Timer\TimerMgr.cs" />
     <Compile Include="Assets\Scripts\Timer\TimerUtil.cs" />
-    <Compile Include="Assets\Scripts\UI\BaseUI\BaseCtrl.cs" />
-    <Compile Include="Assets\Scripts\UI\BaseUI\BaseModel.cs" />
-    <Compile Include="Assets\Scripts\UI\BaseUI\BaseUI.cs" />
-    <Compile Include="Assets\Scripts\UI\BaseUI\BaseUICtrl.cs" />
-    <Compile Include="Assets\Scripts\Utility\PrefsUtil.cs" />
-    <Compile Include="Assets\Scripts\Utility\TextureUtility.cs" />
-    <Compile Include="Assets\Scripts\Utility\Utility.cs" />
+    <Compile Include="Assets\Scripts\Tools\Helper.cs" />
+    <Compile Include="Assets\Scripts\Tools\PrefsUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\Data\Proto\BaseJsonProto.cs" />
+    <Compile Include="Assets\Scripts\Utility\EncryptUtil\AESEncryptUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\EncryptUtil\DESEncryptUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\EncryptUtil\JsonEncryptUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\EncryptUtil\MD5EncryptUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\EncryptUtil\RSAEncryptUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\EncryptUtil\XorEncryptUtil.cs" />
+    <Compile Include="Assets\Scripts\Utility\EventUtil\EventUtil.cs" />
     <None Include="Assets\StreamingAssets\build_info.txt" />
     <Reference Include="UnityEngine">
       <HintPath>/Applications/Unity/Hub/Editor/2019.4.15f1c1/Unity.app/Contents/Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -294,6 +326,9 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Assets/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>/Users/f9/Documents/UnityProject/UnityARFace/UnityARFaceDemo/Assets/Plugins/JsonDotNet/Assemblies/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>/Applications/Unity/Hub/Editor/2019.4.15f1c1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
