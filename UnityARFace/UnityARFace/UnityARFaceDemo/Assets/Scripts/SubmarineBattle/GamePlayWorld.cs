@@ -33,6 +33,7 @@ public class GamePlayWorld : MonoBehaviour
         if (boxCollider2D == null)
         {
             boxCollider2D = go.AddComponent<BoxCollider2D>();
+            boxCollider2D.size=new Vector2(1.4f,1.6f);
         }
         boxCollider2D.isTrigger = false;
 
