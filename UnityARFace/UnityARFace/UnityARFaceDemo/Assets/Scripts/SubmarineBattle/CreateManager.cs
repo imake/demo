@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CreateManager : Singleton<CreateManager>
 {
-    public List<GameObject> obstacleList;
+    public List<Obstacle> obstacleList;
 
     /// <summary>
     /// 当前障碍生成位置
@@ -12,7 +12,7 @@ public class CreateManager : Singleton<CreateManager>
     private Vector3 curPos;
     public override void Init()
     {
-        obstacleList = new List<GameObject>();
+        obstacleList = new List<Obstacle>();
         InitData();
     }
 
@@ -28,16 +28,27 @@ public class CreateManager : Singleton<CreateManager>
     {
         SetCreatePosInfo();
 
-        GameObject obstacle = PoolManager.Instance.GetObject(GameConst.ObstacleName);
-        if (obstacle == null)
+        GameObject obstacleGo = PoolManager.Instance.GetObject(GameConst.ObstacleName);
+        if (obstacleGo == null)
         {
             GameObject go = ResourcesManager.Instance.GetResource(PrefabPathConst.ObstaclePath, typeof(GameObject), enResourceType.ScenePrefab, true).content as GameObject;
-            obstacle = GameObject.Instantiate(go);
-            obstacle.transform.SetParent(AppObjConst.GamePlayObstacleGO.transform);
-            obstacle.name = go.name;
-            PoolManager.Instance.PushObject(GameConst.ObstacleName, obstacle);
+            obstacleGo = GameObject.Instantiate(go);
+            obstacleGo.transform.SetParent(AppObjConst.GamePlayObstacleGO.transform);
+            obstacleGo.name = go.name;
+            PoolManager.Instance.PushObject(GameConst.ObstacleName, obstacleGo);
         }
-        obstacle.transform.position = curPos;
+        obstacleGo.transform.position = curPos;
+
+        //障碍物数量加一
+        BattleDataMgr.Instance.obstacleCount++;
+
+        Obstacle obstacle = new Obstacle();
+        obstacle.number = BattleDataMgr.Instance.obstacleCount;
+        obstacle.entity = obstacleGo;
+        obstacle.InitIntegral();
+
+        BattleDataMgr.Instance.lastObstacle = obstacle;
+
         obstacleList.Add(obstacle);
     }
 
@@ -48,8 +59,9 @@ public class CreateManager : Singleton<CreateManager>
         int seed = (int)System.DateTime.Now.Ticks;
         System.Random random = new System.Random(seed);
         int posY = random.Next(-2, 3);
+        BattleDataMgr.Instance.obstaclePosition = posY;
 
-        curPos = new Vector3(6.5f, posY, 0);
+        curPos = new Vector3(6.5f, BattleDataMgr.Instance.obstaclePosition, 0);
     }
 
     public void Update()
@@ -61,15 +73,25 @@ public class CreateManager : Singleton<CreateManager>
 
         for (int i = 0; i < obstacleList.Count; i++)
         {
-            obstacleList[i].transform.Translate(Vector3.left * 5 * Time.deltaTime);
+            obstacleList[i].entity.transform.Translate(Vector3.left * BattleDataMgr.Instance.obstacleSpeed * Time.deltaTime);
+        }
+
+        //障碍物出界回收
+        for (int i = 0; i < obstacleList.Count; i++)
+        {
+            if (obstacleList[i].entity.transform.position.x < -6.5f)
+            {
+                PoolManager.Instance.ReclaimActiveObject(obstacleList[i].entity.name, obstacleList[i].entity);
+                RemoveEntity(obstacleList[i]);
+            }
         }
     }
 
-    public void RemoveEntity(GameObject go)
+    public void RemoveEntity(Obstacle obstacle)
     {
-        if (obstacleList.Contains(go))
+        if (obstacleList.Contains(obstacle))
         {
-            obstacleList.Remove(go);
+            obstacleList.Remove(obstacle);
         }
     }
 }

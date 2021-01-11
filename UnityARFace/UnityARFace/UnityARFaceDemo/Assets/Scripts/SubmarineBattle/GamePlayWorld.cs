@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class GamePlayWorld : MonoBehaviour
 {
-    private TimerInfo timer_CreateObstacle;
-
     private GameObject submarineGo;
+
+    private int lastRate;
+
     void Awake()
     {
         BattleDataMgr.Instance.isGameOver = true;
 
         CreateManager.Instance.Init();
-        timer_CreateObstacle = TimerUtil.GamePlayTimer.AddLoopTimer(1f, OnCreateObstacle);
 
         GameObject go = ResourcesManager.Instance.GetResource(PrefabPathConst.SubmarinePath, typeof(GameObject), enResourceType.ScenePrefab, false).content as GameObject;
         submarineGo = Instantiate(go);
@@ -25,6 +25,8 @@ public class GamePlayWorld : MonoBehaviour
         {
             component = submarineGo.AddComponent<TomatoMonoComponent>();
         }
+
+        CreateManager.Instance.CreateEntity();
     }
 
     public void InitBoxCollider(GameObject go)
@@ -33,7 +35,7 @@ public class GamePlayWorld : MonoBehaviour
         if (boxCollider2D == null)
         {
             boxCollider2D = go.AddComponent<BoxCollider2D>();
-            boxCollider2D.size=new Vector2(1.4f,1.6f);
+            boxCollider2D.size=new Vector2(1.6f,1.6f);
         }
         boxCollider2D.isTrigger = false;
 
@@ -49,13 +51,20 @@ public class GamePlayWorld : MonoBehaviour
         }
     }
 
-    private void OnCreateObstacle(TimerInfo obj)
+    /// <summary>
+    /// 生成障碍物规则
+    /// </summary>
+    private void CreateObstacle()
     {
         if (!BattleDataMgr.Instance.isGameOver)
         {
             return;
         }
-        CreateManager.Instance.CreateEntity();
+
+        if (BattleDataMgr.Instance.lastObstacle != null&&6.5f - BattleDataMgr.Instance.lastObstacle.entity.transform.position.x >= 5)
+        {
+            CreateManager.Instance.CreateEntity();
+        }
     }
 
     void Update()
@@ -78,25 +87,42 @@ public class GamePlayWorld : MonoBehaviour
 
         submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, temp.y, submarineGo.transform.position.z);
 
-        List<GameObject> list = CreateManager.Instance.obstacleList;
+        //潜水艇穿过障碍物后，增加积分
+        List<Obstacle> list = CreateManager.Instance.obstacleList;
         for (int i = 0; i < list.Count; i++)
         {
-            if (list[i].transform.position.x < -6.5f)
+            if (!list[i].isPass)
             {
-                PoolManager.Instance.ReclaimActiveObject(list[i].name, list[i]);
-                CreateManager.Instance.RemoveEntity(list[i]);
+                if (list[i].entity.transform.position.x < 0)
+                {
+                    BattleDataMgr.Instance.passObstacleCount++;
+                    BattleDataMgr.Instance.integral += list[i].integral;
+                    list[i].isPass = true;
+
+                    CalculateSpeed();
+                }
             }
         }
+
+        CreateObstacle();
+    }
+
+    /// <summary>
+    /// 计算速度
+    /// </summary>
+    private void CalculateSpeed()
+    {
+        int rate = BattleDataMgr.Instance.passObstacleCount / 10;
+        if (lastRate == rate)
+        {
+            return;
+        }
+        lastRate = rate;
+        BattleDataMgr.Instance.obstacleSpeed = BattleDataMgr.Instance.obstacleSpeed * (1 + rate * 0.1f);
     }
 
     private void OnDisable()
     {
-        if (TimerMgr.Instance != null)
-        {
-            if (TimerUtil.GamePlayTimer != null)
-            {
-                TimerUtil.GamePlayTimer.RemoveTimer(timer_CreateObstacle);
-            }
-        }
+
     }
 }
