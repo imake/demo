@@ -3,6 +3,7 @@ UnityARFace/UnityARFace/.DS_Store
 *.DS_Store
 *.csproj
 *.sln
+*.meta
 UnityARFace/UnityARFace/UnityARFaceDemo/.vs/
 UnityARFace/UnityARFace/UnityARFaceDemo/Library/
 UnityARFace/UnityARFace/UnityARFaceDemo/Logs/
@@ -12,3 +13,5 @@ UnityARFace/UnityARFace/UnityARFaceDemo/ProjectSettings/
 UnityARFace/UnityARFace/UnityARFaceDemo/UserSettings/
 UnityARFace/UnityARFace/UnityARFaceDemo/Packages/
 UnityARFace/UnityARFace/UnityARFaceDemo/Assets/XR/Settings
+UnityARFace/UnityARFace/UnityARFaceDemo/Assets/StreamingAssets
+UnityARFace/UnityARFace/UnityARFaceDemo/Assets/StreamingAssets/build_info.txt
