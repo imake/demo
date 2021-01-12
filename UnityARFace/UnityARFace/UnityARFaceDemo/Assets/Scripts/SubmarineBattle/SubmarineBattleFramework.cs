@@ -47,11 +47,11 @@ public class SubmarineBattleFramework : MonoBehaviour
 
         if (numberText!=null)
         {
-            numberText.text = BattleDataMgr.Instance.obstacleCount.ToString();
+            numberText.text = "数量:" + BattleDataMgr.Instance.obstacleCount;
         }
         if (integralText!=null)
         {
-            integralText.text = BattleDataMgr.Instance.integral.ToString();
+            integralText.text = "积分:" + BattleDataMgr.Instance.integral;
         }
     }
 }
