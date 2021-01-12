@@ -112,13 +112,13 @@ public class GamePlayWorld : MonoBehaviour
     /// </summary>
     private void CalculateSpeed()
     {
-        int rate = BattleDataMgr.Instance.passObstacleCount / 10;
+        int rate = BattleDataMgr.Instance.passObstacleCount / BattleDataMgr.Instance.integralAddSubNumber;
         if (lastRate == rate)
         {
             return;
         }
         lastRate = rate;
-        BattleDataMgr.Instance.obstacleSpeed = BattleDataMgr.Instance.obstacleSpeed * (1 + rate * 0.1f);
+        BattleDataMgr.Instance.obstacleSpeed = BattleDataMgr.Instance.obstacleSpeed * (1 + rate * BattleDataMgr.Instance.integralAddRate);
     }
 
     private void OnDisable()

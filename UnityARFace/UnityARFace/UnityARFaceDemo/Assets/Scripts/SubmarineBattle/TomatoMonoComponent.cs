@@ -11,6 +11,9 @@ public class TomatoMonoComponent : MonoBehaviour
             Debug.Log("游戏结束！");
 
             BattleDataMgr.Instance.isGameOver = false;
+
+            SubmarineBattleFramework battleFramework = GameObject.Find("SubmarineBattleFramework").GetComponent<SubmarineBattleFramework>();
+            battleFramework.reStartBtn.gameObject.SetActive(true);
         }
     }
 

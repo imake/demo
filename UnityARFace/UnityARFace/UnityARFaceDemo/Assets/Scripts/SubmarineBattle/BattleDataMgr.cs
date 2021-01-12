@@ -43,4 +43,26 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// 最后生成的障碍物
     /// </summary>
     public Obstacle lastObstacle;
+
+    /// <summary>
+    /// 经过多少个障碍物积分增加一次
+    /// </summary>
+    public int integralAddSubNumber = 20;
+
+    /// <summary>
+    /// 积分增加速率
+    /// </summary>
+    public float integralAddRate = 0.05f;
+
+    public void ResetData()
+    {
+        isGameOver = false;
+        obstacleSpeed = 5f;
+        integral = 0;
+        obstacleDistance = 2f;
+        obstacleCount = 0;
+        passObstacleCount = 0;
+        obstaclePosition = 0;
+        lastObstacle = null;
+    }
 }
