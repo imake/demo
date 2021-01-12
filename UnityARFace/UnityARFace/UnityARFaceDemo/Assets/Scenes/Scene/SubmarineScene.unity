@@ -827,7 +827,7 @@ GameObject:
   - component: {fileID: 2124535214}
   - component: {fileID: 2124535215}
   m_Layer: 0
-  m_Name: SubmarinrBattleFramework
+  m_Name: SubmarineBattleFramework
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -861,4 +861,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numberText: {fileID: 1601775972}
   integralText: {fileID: 1403088551}
-  reStart: {fileID: 0}
+  reStartBtn: {fileID: 355961986}
