@@ -54,11 +54,9 @@ public class CreateManager : Singleton<CreateManager>
 
     private void SetCreatePosInfo()
     {
-        //int posY = Random.Range(-2, 3);
-
         int seed = (int)System.DateTime.Now.Ticks;
         System.Random random = new System.Random(seed);
-        int posY = random.Next(-2, 3);
+        int posY = random.Next(-3, 4);
         BattleDataMgr.Instance.obstaclePosition = posY;
 
         curPos = new Vector3(6.5f, BattleDataMgr.Instance.obstaclePosition, 0);
