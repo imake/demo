@@ -74,7 +74,7 @@ public class GamePlayWorld : MonoBehaviour
             return;
         }
 
-        Vector3 temp;
+        Vector3 temp  = Vector3.zero;
         float targetScreensZ = Camera.main.WorldToScreenPoint(submarineGo.transform.position).z;
 
 #if UNITY_EDITOR
