@@ -94,4 +94,10 @@ public class CreateManager : Singleton<CreateManager>
             obstacleList.Remove(obstacle);
         }
     }
+
+    public void RemoveAllEntity()
+    {
+        obstacleList.Clear();
+        PoolManager.Instance.Destory();
+    }
 }
