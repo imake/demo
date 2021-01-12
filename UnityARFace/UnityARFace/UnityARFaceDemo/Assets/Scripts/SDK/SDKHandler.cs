@@ -107,6 +107,10 @@ public class SDKHandler : SingletonMono<SDKHandler>
 
     int x;
     float y, z;
+    /// <summary>
+    /// 橘子模型接受人脸旋转角度
+    /// </summary>
+    /// <param name="strAngle"></param>
     public void ResponseFaceRotation(string strAngle)
     {
         if (TextureBlendSceneFramework.Instance == null)
@@ -130,5 +134,14 @@ public class SDKHandler : SingletonMono<SDKHandler>
         }
 
         TextureBlendSceneFramework.Instance.Rotate(x,y,z);
+    }
+
+    /// <summary>
+    /// 潜水艇游戏接收人脸位置
+    /// </summary>
+    /// <param name="posRate"></param>
+    public void ResponseFacePosition(float posRate)
+    {
+
     }
 }

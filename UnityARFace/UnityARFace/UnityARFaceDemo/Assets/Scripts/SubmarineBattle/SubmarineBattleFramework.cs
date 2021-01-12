@@ -21,6 +21,8 @@ public class SubmarineBattleFramework : MonoBehaviour
         GamePlayWorld world = AppObjConst.GamePlayGo.AddComponent<GamePlayWorld>();
 
         reStartBtn.onClick.AddListener(OnReStart);
+
+        //Debug.Log("width=" + Screen.width + " height=" + Screen.height);
     }
 
     private void OnReStart()
