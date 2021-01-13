@@ -25,6 +25,8 @@ public class GameFramework :  MonoBehaviour
     {
         m_instance = this;
 
+        Debug.Log("场景" + SceneManager.GetActiveScene().name + "加载完成！");
+
         GameObject.DontDestroyOnLoad(this);
         InitEngineSingleton();
 

@@ -23,6 +23,9 @@ public class NativeAPI : IPlatformSDK
 
     [DllImport("__Internal")]
     private static extern void sendPlatformStartSenseComplete();
+
+    [DllImport("__Internal")]
+    private static extern void sendSetUnityViewUpToIosView();
 #endif
 
     public override void Init()
@@ -50,6 +53,14 @@ public class NativeAPI : IPlatformSDK
     {
 #if UNITY_IOS
         sendPlatformStartSenseComplete();
+#endif
+    }
+
+
+    public override void SendSetUnityViewUpToIosView()
+    {
+#if UNITY_IOS
+        sendSetUnityViewUpToIosView();
 #endif
     }
 }

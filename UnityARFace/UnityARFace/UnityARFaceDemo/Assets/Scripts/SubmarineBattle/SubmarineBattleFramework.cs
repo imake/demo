@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class SubmarineBattleFramework : MonoBehaviour
@@ -14,6 +15,10 @@ public class SubmarineBattleFramework : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("场景" + SceneManager.GetActiveScene().name + "加载完成！");
+
+        SDKManager.Instance.SendSetUnityViewUpToIosView();
+
         //ResourcesManager.Instance.Init();
         //TimerMgr.Instance.Init();
 

@@ -46,6 +46,14 @@ public class SDKManager : Singleton<SDKManager>
         platformSDK.SendPlatformStartSenseComplete();
     }
 
+    /// <summary>
+    /// 设置unity显示在ios界面上
+    /// </summary>
+    public void SendSetUnityViewUpToIosView()
+    {
+        platformSDK.SendSetUnityViewUpToIosView();
+    }
+
     public override void Dispose()
     {
         base.Dispose();

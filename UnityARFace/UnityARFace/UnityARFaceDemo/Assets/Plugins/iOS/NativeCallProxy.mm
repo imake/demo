@@ -23,6 +23,12 @@ void sendPlatformStartSenseComplete() {
 }
 
 extern "C" {
+void sendSetUnityViewUpToIosView() {
+    return [api sendSetUnityViewUpToIosView];
+}
+}
+
+extern "C" {
 void refreshWithBytes(void* bytes, UInt32 length){
     return [api refreshWithBytes:bytes length:length];
 }

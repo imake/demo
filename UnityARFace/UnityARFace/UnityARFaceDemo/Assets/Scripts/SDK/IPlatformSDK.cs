@@ -12,4 +12,6 @@ public abstract class IPlatformSDK
     public abstract void ShowHostMainWindow();
 
     public abstract void SendPlatformStartSenseComplete();
+
+    public abstract void SendSetUnityViewUpToIosView();
 }

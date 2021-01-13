@@ -28,4 +28,9 @@ public class AndroidSDK : IPlatformSDK
     {
 
     }
+
+    public override void SendSetUnityViewUpToIosView()
+    {
+
+    }
 }

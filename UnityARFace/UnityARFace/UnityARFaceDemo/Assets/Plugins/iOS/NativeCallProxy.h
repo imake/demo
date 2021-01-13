@@ -9,6 +9,7 @@
 - (void) showHostMainWindow:(NSString*)color;
 // other methods
 -(void) sendPlatformStartSenseComplete;
+-(void) sendSetUnityViewUpToIosView;
 - (void) refreshWithBytes:(void *)bytes length:(NSUInteger)length;
 @end
 

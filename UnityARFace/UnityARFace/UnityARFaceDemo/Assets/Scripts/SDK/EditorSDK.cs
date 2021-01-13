@@ -24,4 +24,9 @@ public class EditorSDK : IPlatformSDK
     {
 
     }
+
+    public override void SendSetUnityViewUpToIosView()
+    {
+
+    }
 }
