@@ -78,7 +78,7 @@ public class CreateManager : Singleton<CreateManager>
         upGo.localPosition = new Vector3(upGo.localPosition.x, dis, upGo.localPosition.z);
         downGo.localPosition = new Vector3(downGo.localPosition.x, -dis, downGo.localPosition.z);
 
-        Debug.Log("dis="+dis);
+        //Debug.Log("dis="+dis);
     }
 
     /// <summary>

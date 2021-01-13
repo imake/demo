@@ -95,5 +95,11 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
         obstaclePosition = 0;
         lastObstacle = null;
         submarinePos = 1;
+        integralAddSubNumber = 10;
+        integralAddRate = 0.05f;
+        speedAddSubNumber = 20;
+        speedAddRate = 0.1f;
+        disAddSubNumber = 20;
+        disAddRate = 0.1f;
     }
 }
