@@ -74,6 +74,7 @@ public class GamePlayWorld : MonoBehaviour
             return;
         }
 
+        /*
         Vector3 temp  = Vector3.zero;
         float targetScreensZ = Camera.main.WorldToScreenPoint(submarineGo.transform.position).z;
 
@@ -86,6 +87,9 @@ public class GamePlayWorld : MonoBehaviour
 #endif
 
         submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, temp.y, submarineGo.transform.position.z);
+        */
+
+        submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, BattleDataMgr.Instance.submarinePos, submarineGo.transform.position.z);
 
         //潜水艇穿过障碍物后，增加积分
         List<Obstacle> list = CreateManager.Instance.obstacleList;

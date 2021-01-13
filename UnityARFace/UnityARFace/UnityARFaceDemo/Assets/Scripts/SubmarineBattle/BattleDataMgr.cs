@@ -54,6 +54,11 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// </summary>
     public float integralAddRate = 0.05f;
 
+    /// <summary>
+    /// 潜水艇位置
+    /// </summary>
+    public float submarinePos = 1;
+
     public void ResetData()
     {
         isGameOver = false;
@@ -64,5 +69,6 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
         passObstacleCount = 0;
         obstaclePosition = 0;
         lastObstacle = null;
+        submarinePos = 1;
     }
 }

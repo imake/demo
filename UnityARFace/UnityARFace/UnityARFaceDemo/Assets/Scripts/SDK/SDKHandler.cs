@@ -140,8 +140,10 @@ public class SDKHandler : SingletonMono<SDKHandler>
     /// 潜水艇游戏接收人脸位置
     /// </summary>
     /// <param name="posRate"></param>
-    public void ResponseFacePosition(float posRate)
+    public void ResponseFacePosition(string posRate)
     {
-
+        float rate = float.Parse(posRate);
+        float pos = GameConst.CheckAllDistance * rate + GameConst.AllDistanceDownPos;
+        BattleDataMgr.Instance.submarinePos = pos;
     }
 }
