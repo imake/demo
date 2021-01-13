@@ -29,7 +29,7 @@ public class Obstacle
     /// </summary>
     public void InitIntegral()
     {
-        Debug.Log("number=" + number);
-        integral = (int)(1 + (number / 10.0f) * 0.1f);
+        //Debug.Log("number=" + number);
+        integral = (int)(1 + (number / BattleDataMgr.Instance.integralAddSubNumber) * BattleDataMgr.Instance.integralAddRate);
     }
 }

@@ -17,7 +17,7 @@ public class SubmarineBattleFramework : MonoBehaviour
     {
         Debug.Log("场景" + SceneManager.GetActiveScene().name + "加载完成！");
 
-        SDKManager.Instance.SendSetUnityViewUpToIosView();
+        //SDKManager.Instance.SendSetUnityViewUpToIosView();
 
         ResourcesManager.Instance.Init();
         TimerMgr.Instance.Init();

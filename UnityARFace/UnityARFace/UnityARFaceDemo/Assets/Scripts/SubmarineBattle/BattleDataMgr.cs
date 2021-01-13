@@ -22,7 +22,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 障碍物横向间隔距离
     /// </summary>
-    public float obstacleDistance = 2f;
+    public float obstacleDistance = 5f;
 
     /// <summary>
     /// 当前生成过的障碍物数量
@@ -47,12 +47,32 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 经过多少个障碍物积分增加一次
     /// </summary>
-    public int integralAddSubNumber = 20;
+    public int integralAddSubNumber = 10;
 
     /// <summary>
     /// 积分增加速率
     /// </summary>
     public float integralAddRate = 0.05f;
+
+    /// <summary>
+    /// 经过多少个障碍物速度增加一次
+    /// </summary>
+    public int speedAddSubNumber = 20;
+
+    /// <summary>
+    /// 速度增加速率
+    /// </summary>
+    public float speedAddRate = 0.1f;
+
+    /// <summary>
+    /// 经过多少个障碍物难度增加一次（变窄）
+    /// </summary>
+    public int disAddSubNumber = 20;
+
+    /// <summary>
+    /// 积分增加速率
+    /// </summary>
+    public float disAddRate = 0.1f;
 
     /// <summary>
     /// 潜水艇位置
@@ -69,7 +89,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
         isGameOver = false;
         obstacleSpeed = 5f;
         integral = 0;
-        obstacleDistance = 2f;
+        obstacleDistance = 5f;
         obstacleCount = 0;
         passObstacleCount = 0;
         obstaclePosition = 0;

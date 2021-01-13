@@ -10,6 +10,9 @@ public class CreateManager : Singleton<CreateManager>
     /// 当前障碍生成位置
     /// </summary>
     private Vector3 curPos;
+
+    private int lastRate;
+
     public override void Init()
     {
         obstacleList = new List<Obstacle>();
@@ -72,8 +75,31 @@ public class CreateManager : Singleton<CreateManager>
         float dis = partDis / 2;
         Transform upGo = go.transform.Find("UpObstacleImg");
         Transform downGo = go.transform.Find("DownObstacleImg");
-        upGo.position = new Vector3(upGo.position.x, dis, upGo.position.z);
-        downGo.position = new Vector3(downGo.position.x, -dis, downGo.position.z);
+        upGo.localPosition = new Vector3(upGo.localPosition.x, dis, upGo.localPosition.z);
+        downGo.localPosition = new Vector3(downGo.localPosition.x, -dis, downGo.localPosition.z);
+
+        Debug.Log("dis="+dis);
+    }
+
+    /// <summary>
+    /// 每经过10个障碍柱，两个柱子间隔就有30%的概率变窄10%
+    /// </summary>
+    public void CalculatePartObstacleDis()
+    {
+        int rate = (int)(BattleDataMgr.Instance.passObstacleCount / BattleDataMgr.Instance.disAddSubNumber);
+        if (lastRate == rate)
+        {
+            return;
+        }
+        lastRate = rate;
+        
+        int seed = (int)System.DateTime.Now.Ticks;
+        System.Random random = new System.Random(seed);
+        int value = random.Next(1, 11);
+        if (value<4)
+        {
+            BattleDataMgr.Instance.partObstacleDistance = BattleDataMgr.Instance.partObstacleDistance * (1 - rate * BattleDataMgr.Instance.disAddRate);
+        }
     }
 
     public void Update()
