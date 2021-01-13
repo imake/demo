@@ -19,8 +19,8 @@ public class SubmarineBattleFramework : MonoBehaviour
 
         SDKManager.Instance.SendSetUnityViewUpToIosView();
 
-        //ResourcesManager.Instance.Init();
-        //TimerMgr.Instance.Init();
+        ResourcesManager.Instance.Init();
+        TimerMgr.Instance.Init();
 
         AppObjConst.GamePlayGo = new GameObject(AppObjConst.GamePlayGoName);
         GamePlayWorld world = AppObjConst.GamePlayGo.AddComponent<GamePlayWorld>();

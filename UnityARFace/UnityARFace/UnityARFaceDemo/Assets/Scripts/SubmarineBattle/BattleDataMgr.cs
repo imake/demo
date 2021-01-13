@@ -20,7 +20,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     public int integral = 0;
 
     /// <summary>
-    /// 障碍物间隔距离
+    /// 障碍物横向间隔距离
     /// </summary>
     public float obstacleDistance = 2f;
 
@@ -58,6 +58,11 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// 潜水艇位置
     /// </summary>
     public float submarinePos = 1;
+
+    /// <summary>
+    /// 一个障碍物的两个柱子之间的间隔距离
+    /// </summary>
+    public float partObstacleDistance = 5;
 
     public void ResetData()
     {

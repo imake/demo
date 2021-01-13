@@ -16,9 +16,9 @@ public partial class GameConst
     #endregion
 
     /// <summary>
-    /// 障碍物的长度
+    /// 障碍物中单个的长度
     /// </summary>
-    public const float ObstacleLength = 11;
+    public const float PartObstacleLength = 11;
     /// <summary>
     /// 屏幕中可移动的上下距离范围
     /// </summary>

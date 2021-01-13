@@ -37,6 +37,7 @@ public class CreateManager : Singleton<CreateManager>
             obstacleGo.name = go.name;
             PoolManager.Instance.PushObject(GameConst.ObstacleName, obstacleGo);
         }
+        SetPartPos(obstacleGo);
         obstacleGo.transform.position = curPos;
 
         //障碍物数量加一
@@ -60,6 +61,19 @@ public class CreateManager : Singleton<CreateManager>
         BattleDataMgr.Instance.obstaclePosition = posY;
 
         curPos = new Vector3(6.5f, BattleDataMgr.Instance.obstaclePosition, 0);
+    }
+    
+    /// <summary>
+    /// 根据单个柱子之间的上下间隔，设置单个柱子的坐标
+    /// </summary>
+    public void SetPartPos(GameObject go)
+    {
+        float partDis = GameConst.PartObstacleLength + BattleDataMgr.Instance.partObstacleDistance;
+        float dis = partDis / 2;
+        Transform upGo = go.transform.Find("UpObstacleImg");
+        Transform downGo = go.transform.Find("DownObstacleImg");
+        upGo.position = new Vector3(upGo.position.x, dis, upGo.position.z);
+        downGo.position = new Vector3(downGo.position.x, -dis, downGo.position.z);
     }
 
     public void Update()
