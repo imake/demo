@@ -75,21 +75,21 @@ public class GamePlayWorld : MonoBehaviour
         }
 
 
-//        Vector3 temp = Vector3.zero;
-//        float targetScreensZ = Camera.main.WorldToScreenPoint(submarineGo.transform.position).z;
+        Vector3 temp = Vector3.zero;
+        float targetScreensZ = Camera.main.WorldToScreenPoint(submarineGo.transform.position).z;
 
-//#if UNITY_EDITOR
-//        temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, targetScreensZ));
-//#else
-//        if (Input.touchCount >0) {
-//            temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, targetScreensZ));
-//        }
-//#endif
+#if UNITY_EDITOR
+        temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, targetScreensZ));
+#else
+        if (Input.touchCount >0) {
+            temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, targetScreensZ));
+        }
+#endif
 
-//        submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, temp.y, submarineGo.transform.position.z);
+        submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, temp.y, submarineGo.transform.position.z);
 
 
-        submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, BattleDataMgr.Instance.submarinePos, submarineGo.transform.position.z);
+        //submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, BattleDataMgr.Instance.submarinePos, submarineGo.transform.position.z);
 
         //潜水艇穿过障碍物后，增加积分
         List<Obstacle> list = CreateManager.Instance.obstacleList;
@@ -123,6 +123,10 @@ public class GamePlayWorld : MonoBehaviour
         }
         lastRate = rate;
         BattleDataMgr.Instance.obstacleSpeed = BattleDataMgr.Instance.obstacleSpeed * (1 + rate * BattleDataMgr.Instance.speedAddRate);
+        if (BattleDataMgr.Instance.obstacleSpeed>20)
+        {
+            BattleDataMgr.Instance.obstacleSpeed = 20;
+        }
     }
 
     private void OnDisable()

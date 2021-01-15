@@ -52,7 +52,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 积分增加速率
     /// </summary>
-    public float integralAddRate = 0.05f;
+    public float integralAddRate = 0.1f;
 
     /// <summary>
     /// 经过多少个障碍物速度增加一次
@@ -62,7 +62,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 速度增加速率
     /// </summary>
-    public float speedAddRate = 0.1f;
+    public float speedAddRate = 0.05f;
 
     /// <summary>
     /// 经过多少个障碍物难度增加一次（变窄）
@@ -70,7 +70,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     public int disAddSubNumber = 20;
 
     /// <summary>
-    /// 积分增加速率
+    /// 难度增加速率
     /// </summary>
     public float disAddRate = 0.1f;
 
@@ -96,9 +96,9 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
         lastObstacle = null;
         submarinePos = 1;
         integralAddSubNumber = 10;
-        integralAddRate = 0.05f;
+        integralAddRate = 0.1f;
         speedAddSubNumber = 20;
-        speedAddRate = 0.1f;
+        speedAddRate = 0.05f;
         disAddSubNumber = 20;
         disAddRate = 0.1f;
     }
