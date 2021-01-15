@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public static class Helper
+public static class HelperTools
 {
     public static void LookToCamera(GameObject obj)
     {
@@ -36,6 +36,8 @@ public static class Helper
         }
     }
 
+    static RenderTexture rt = null;
+    static Texture2D screenShot = null;
     /// <summary>
     /// 截图
     /// </summary>
@@ -43,7 +45,11 @@ public static class Helper
     public static byte[] GetScreenTexture(Camera camera, Rect rect)
     {
         // 创建一个RenderTexture对象
-        RenderTexture rt = new RenderTexture((int)rect.width, (int)rect.height, 24);
+        if (rt == null)
+        {
+            rt = new RenderTexture((int)rect.width, (int)rect.height, 24);
+        }
+
         // 临时设置相关相机的targetTexture为rt, 并手动渲染相关相机
         camera.targetTexture = rt;
         camera.Render();
@@ -54,7 +60,11 @@ public static class Helper
 
         // 激活这个rt, 并从中中读取像素。
         RenderTexture.active = rt;
-        Texture2D screenShot = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGB24, false);
+
+        if (screenShot == null)
+        {
+            screenShot = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGBA32, false);
+        }
         screenShot.ReadPixels(rect, 0, 0);// 注：这个时候，它是从RenderTexture.active中读取像素
         screenShot.Apply();
 
@@ -62,7 +72,6 @@ public static class Helper
         camera.targetTexture = null;
         //ps: camera2.targetTexture = null;
         RenderTexture.active = null; // JC: added to avoid errors
-        GameObject.Destroy(rt);
         // 最后将这些纹理数据，成一个png图片文件
         byte[] bytes = screenShot.EncodeToPNG();
 

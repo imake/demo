@@ -21,7 +21,6 @@ public class SDKManager : Singleton<SDKManager>
         Debug.Log("_____> platformSDK=" + platformSDK);
     }
 
-
     /// <summary>
     /// 发送图片文件
     /// </summary>
@@ -52,6 +51,16 @@ public class SDKManager : Singleton<SDKManager>
     public void SendSetUnityViewUpToIosView()
     {
         platformSDK.SendSetUnityViewUpToIosView();
+    }
+
+    /// <summary>
+    /// 发送潜水艇场景的图片
+    /// </summary>
+    /// <param name="bytes"></param>
+    /// <param name="length"></param>
+    public void RefreshSubmarineWithBytes(byte[] bytes)
+    {
+        platformSDK.RefreshSubmarineWithBytes(bytes, bytes.Length);
     }
 
     public override void Dispose()

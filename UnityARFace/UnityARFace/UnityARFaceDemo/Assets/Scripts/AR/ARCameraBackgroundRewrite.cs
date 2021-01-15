@@ -354,7 +354,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
             //Debug.Log("OnCameraFrameReceivedTime=" + Time.time);
 
-            byte[] bytes = Helper.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 960));
+            byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 960));
 
             SDKManager.Instance.RefreshWithBytes(bytes);
         }
@@ -438,7 +438,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
         IEnumerator Screenshot()
         {
             Debug.Log("CameraOpenButtonPressedStartTime=" + Time.time);
-            bytes = Helper.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
+            bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
 
             Debug.Log("CameraOpenButtonPressedEndTime=" + Time.time + " " + bytes.Length);
 

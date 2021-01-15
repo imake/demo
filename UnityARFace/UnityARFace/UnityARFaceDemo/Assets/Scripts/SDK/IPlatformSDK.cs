@@ -14,4 +14,6 @@ public abstract class IPlatformSDK
     public abstract void SendPlatformStartSenseComplete();
 
     public abstract void SendSetUnityViewUpToIosView();
+
+    public abstract void RefreshSubmarineWithBytes(byte[] bytes, int length);
 }

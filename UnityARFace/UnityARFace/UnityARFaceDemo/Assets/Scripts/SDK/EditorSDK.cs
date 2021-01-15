@@ -29,4 +29,9 @@ public class EditorSDK : IPlatformSDK
     {
 
     }
+
+    public override void RefreshSubmarineWithBytes(byte[] bytes, int length)
+    {
+        
+    }
 }

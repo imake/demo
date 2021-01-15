@@ -26,6 +26,9 @@ public class NativeAPI : IPlatformSDK
 
     [DllImport("__Internal")]
     private static extern void sendSetUnityViewUpToIosView();
+
+    [DllImport("__Internal")]
+    private static extern void refreshSubmarineWithBytes(byte[] bytes, int length);
 #endif
 
     public override void Init()
@@ -61,6 +64,13 @@ public class NativeAPI : IPlatformSDK
     {
 #if UNITY_IOS
         sendSetUnityViewUpToIosView();
+#endif
+    }
+
+    public override void RefreshSubmarineWithBytes(byte[] bytes, int length)
+    {
+#if UNITY_IOS
+        refreshSubmarineWithBytes(bytes, length);
 #endif
     }
 }

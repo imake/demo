@@ -33,4 +33,9 @@ public class AndroidSDK : IPlatformSDK
     {
 
     }
+
+    public override void RefreshSubmarineWithBytes(byte[] bytes, int length)
+    {
+
+    }
 }
