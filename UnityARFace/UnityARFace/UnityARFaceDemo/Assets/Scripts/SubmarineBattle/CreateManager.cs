@@ -41,7 +41,7 @@ public class CreateManager : Singleton<CreateManager>
             PoolManager.Instance.PushObject(GameConst.ObstacleName, obstacleGo);
         }
         SetPartPos(obstacleGo);
-        obstacleGo.transform.position = curPos;
+        obstacleGo.transform.localPosition = curPos;
 
         //障碍物数量加一
         BattleDataMgr.Instance.obstacleCount++;

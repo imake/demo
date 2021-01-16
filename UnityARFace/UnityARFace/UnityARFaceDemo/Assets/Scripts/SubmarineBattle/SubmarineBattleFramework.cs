@@ -24,6 +24,7 @@ public class SubmarineBattleFramework : MonoBehaviour
 
         AppObjConst.GamePlayGo = new GameObject(AppObjConst.GamePlayGoName);
         GamePlayWorld world = AppObjConst.GamePlayGo.AddComponent<GamePlayWorld>();
+        AppObjConst.GamePlayGo.transform.position = new Vector3(AppObjConst.GamePlayGo.transform.position.x, AppObjConst.GamePlayGo.transform.position.y, 10);
 
         reStartBtn.onClick.AddListener(OnReStart);
 
@@ -39,6 +40,7 @@ public class SubmarineBattleFramework : MonoBehaviour
 
         AppObjConst.GamePlayGo = new GameObject(AppObjConst.GamePlayGoName);
         GamePlayWorld world = AppObjConst.GamePlayGo.AddComponent<GamePlayWorld>();
+        AppObjConst.GamePlayGo.transform.position = new Vector3(AppObjConst.GamePlayGo.transform.position.x, AppObjConst.GamePlayGo.transform.position.y, 10);
     }
 
     void Update()

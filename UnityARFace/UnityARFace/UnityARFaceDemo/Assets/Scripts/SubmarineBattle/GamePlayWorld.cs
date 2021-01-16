@@ -82,9 +82,9 @@ public class GamePlayWorld : MonoBehaviour
         //#if UNITY_EDITOR
         //        temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, targetScreensZ));
         //#else
-        //        if (Input.touchCount >0) {
-        //            temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, targetScreensZ));
-        //        }
+        //                if (Input.touchCount >0) {
+        //                    temp = Camera.main.ScreenToWorldPoint(new Vector3(Input.GetTouch(0).position.x, Input.GetTouch(0).position.y, targetScreensZ));
+        //                }
         //#endif
 
         //        submarineGo.transform.position = new Vector3(submarineGo.transform.position.x, temp.y, submarineGo.transform.position.z);
@@ -111,9 +111,9 @@ public class GamePlayWorld : MonoBehaviour
 
         CreateObstacle();
 
-        byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
+        //byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
 
-        SDKManager.Instance.RefreshSubmarineWithBytes(bytes);
+        //SDKManager.Instance.RefreshSubmarineWithBytes(bytes);
     }
 
     /// <summary>
