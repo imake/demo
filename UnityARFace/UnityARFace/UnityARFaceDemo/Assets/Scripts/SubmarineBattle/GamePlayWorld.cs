@@ -111,7 +111,7 @@ public class GamePlayWorld : MonoBehaviour
 
         CreateObstacle();
 
-        byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 960));
+        byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
 
         SDKManager.Instance.RefreshSubmarineWithBytes(bytes);
     }

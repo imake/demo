@@ -11,7 +11,7 @@
 -(void) sendPlatformStartSenseComplete;
 -(void) sendSetUnityViewUpToIosView;
 - (void) refreshWithBytes:(void *)bytes length:(NSUInteger)length;
-- (void) refreshSubmarineWithBytes(void* bytes, UInt32 length);
+- (void) refreshSubmarineWithBytes:(void*) bytes length:(NSUInteger)length;
 @end
 
 __attribute__ ((visibility("default")))
