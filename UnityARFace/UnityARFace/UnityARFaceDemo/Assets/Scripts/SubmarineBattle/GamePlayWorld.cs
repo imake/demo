@@ -62,7 +62,7 @@ public class GamePlayWorld : MonoBehaviour
             return;
         }
 
-        if (BattleDataMgr.Instance.lastObstacle != null&&6.5f - BattleDataMgr.Instance.lastObstacle.entity.transform.position.x >= BattleDataMgr.Instance.obstacleDistance)
+        if (BattleDataMgr.Instance.lastObstacle != null&&6.5f - BattleDataMgr.Instance.lastObstacle.entity.transform.localPosition.x >= BattleDataMgr.Instance.obstacleDistance)
         {
             CreateManager.Instance.CreateEntity();
         }
@@ -128,9 +128,10 @@ public class GamePlayWorld : MonoBehaviour
         }
         lastRate = rate;
         BattleDataMgr.Instance.obstacleSpeed = BattleDataMgr.Instance.obstacleSpeed * (1 + rate * BattleDataMgr.Instance.speedAddRate);
-        if (BattleDataMgr.Instance.obstacleSpeed>20)
+        BattleDataMgr.Instance.obstacleSpeed = 0.0055f;
+        if (BattleDataMgr.Instance.obstacleSpeed>1)
         {
-            BattleDataMgr.Instance.obstacleSpeed = 20;
+            BattleDataMgr.Instance.obstacleSpeed = 1;
         }
     }
 

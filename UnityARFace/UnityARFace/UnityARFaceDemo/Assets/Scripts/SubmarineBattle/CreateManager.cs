@@ -42,6 +42,7 @@ public class CreateManager : Singleton<CreateManager>
         }
         SetPartPos(obstacleGo);
         obstacleGo.transform.localPosition = curPos;
+        obstacleGo.transform.localScale = Vector3.one;
 
         //障碍物数量加一
         BattleDataMgr.Instance.obstacleCount++;
@@ -111,13 +112,15 @@ public class CreateManager : Singleton<CreateManager>
 
         for (int i = 0; i < obstacleList.Count; i++)
         {
-            obstacleList[i].entity.transform.Translate(Vector3.left * BattleDataMgr.Instance.obstacleSpeed * Time.deltaTime);
+            Vector3 speed = Vector3.left * BattleDataMgr.Instance.obstacleSpeed * Time.deltaTime;
+            obstacleList[i].entity.transform.Translate(speed);
+            //Debug.Log("BattleDataMgr.Instance.obstacleSpeed=" + speed);
         }
 
         //障碍物出界回收
         for (int i = 0; i < obstacleList.Count; i++)
         {
-            if (obstacleList[i].entity.transform.position.x < -6.5f)
+            if (obstacleList[i].entity.transform.localPosition.x < -6.5f)
             {
                 PoolManager.Instance.ReclaimActiveObject(obstacleList[i].entity.name, obstacleList[i].entity);
                 RemoveEntity(obstacleList[i]);

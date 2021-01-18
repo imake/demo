@@ -12,7 +12,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 障碍物移动速度
     /// </summary>
-    public float obstacleSpeed = 5f;
+    public float obstacleSpeed = 0.15f;
 
     /// <summary>
     /// 积分

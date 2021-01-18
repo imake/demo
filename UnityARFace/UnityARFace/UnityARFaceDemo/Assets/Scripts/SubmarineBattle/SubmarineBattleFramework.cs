@@ -17,14 +17,15 @@ public class SubmarineBattleFramework : MonoBehaviour
     {
         Debug.Log("场景" + SceneManager.GetActiveScene().name + "加载完成！");
 
-        SDKManager.Instance.SendSetUnityViewUpToIosView();
+        //SDKManager.Instance.SendSetUnityViewUpToIosView();
 
-        //ResourcesManager.Instance.Init();
-        //TimerMgr.Instance.Init();
+        ResourcesManager.Instance.Init();
+        TimerMgr.Instance.Init();
 
         AppObjConst.GamePlayGo = new GameObject(AppObjConst.GamePlayGoName);
         GamePlayWorld world = AppObjConst.GamePlayGo.AddComponent<GamePlayWorld>();
         AppObjConst.GamePlayGo.transform.position = new Vector3(AppObjConst.GamePlayGo.transform.position.x, AppObjConst.GamePlayGo.transform.position.y, 10);
+        AppObjConst.GamePlayGo.transform.localScale = new Vector3(0.03f,0.03f,0.03f);
 
         reStartBtn.onClick.AddListener(OnReStart);
 
@@ -41,6 +42,7 @@ public class SubmarineBattleFramework : MonoBehaviour
         AppObjConst.GamePlayGo = new GameObject(AppObjConst.GamePlayGoName);
         GamePlayWorld world = AppObjConst.GamePlayGo.AddComponent<GamePlayWorld>();
         AppObjConst.GamePlayGo.transform.position = new Vector3(AppObjConst.GamePlayGo.transform.position.x, AppObjConst.GamePlayGo.transform.position.y, 10);
+        AppObjConst.GamePlayGo.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);
     }
 
     void Update()
