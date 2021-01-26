@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -145,5 +146,25 @@ public class SDKHandler : SingletonMono<SDKHandler>
         float rate = float.Parse(posRate);
         float pos = GameConst.CheckAllDistance * rate + GameConst.AllDistanceDownPos;
         BattleDataMgr.Instance.submarinePos = pos;
+    }
+
+    List<Vector2> positions = new List<Vector2>();
+    /// <summary>
+    /// 人体识别接受坐标  
+    /// </summary>
+    /// <param name="positionStrList"></param>
+    public void ResponseHumanBodyJoint(string positionStrList)
+    {
+        positions.Clear();
+        string[] positionArr = positionStrList.Split(';');
+
+        for (int i = 0; i < positionArr.Length; i++)
+        {
+            string[] jointXY = positionArr[i].Split(',');
+            Vector2 pos = new Vector2(float.Parse(jointXY[0]), float.Parse(jointXY[1]));
+            positions.Add(pos);
+        }
+
+
     }
 }
