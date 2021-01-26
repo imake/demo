@@ -30,5 +30,7 @@ public class CameraMgr : MonoBehaviour
         factHeight = Screen.height;
         //实际正交视口 = 初始正交视口 * 初始宽高比 / 实际宽高比
         GetComponent<Camera>().orthographicSize = (initOrthoSize * (initWidth / initHeight)) / (factWidth / factHeight);
+
+        //GetComponent<Camera>().fieldOfView = (initOrthoSize * (initWidth / initHeight)) / (factWidth / factHeight);
     }
 }

@@ -111,6 +111,8 @@ public class GamePlayWorld : MonoBehaviour
 
         CreateObstacle();
 
+        //BattleDataMgr.Instance.battleTexture = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
+
         //byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
 
         //SDKManager.Instance.RefreshSubmarineWithBytes(bytes);
@@ -128,10 +130,10 @@ public class GamePlayWorld : MonoBehaviour
         }
         lastRate = rate;
         BattleDataMgr.Instance.obstacleSpeed = BattleDataMgr.Instance.obstacleSpeed * (1 + rate * BattleDataMgr.Instance.speedAddRate);
-        BattleDataMgr.Instance.obstacleSpeed = 0.0055f;
-        if (BattleDataMgr.Instance.obstacleSpeed>1)
+        //BattleDataMgr.Instance.obstacleSpeed = 0.0055f;
+        if (BattleDataMgr.Instance.obstacleSpeed>20)
         {
-            BattleDataMgr.Instance.obstacleSpeed = 1;
+            BattleDataMgr.Instance.obstacleSpeed = 20;
         }
     }
 

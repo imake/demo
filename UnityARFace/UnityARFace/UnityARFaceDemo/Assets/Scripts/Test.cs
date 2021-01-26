@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Test : MonoBehaviour
 {
     public Image image;
     private void Awake()    {
-        //PlayerSettings.preserveFramebufferAlpha = true;
+        Debug.Log("场景" + SceneManager.GetActiveScene().name + "加载完成！");
+
+        SDKManager.Instance.SendSetUnityViewUpToIosView();
     }
 
     // Start is called before the first frame update

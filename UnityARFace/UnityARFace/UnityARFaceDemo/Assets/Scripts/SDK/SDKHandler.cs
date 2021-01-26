@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -148,23 +147,35 @@ public class SDKHandler : SingletonMono<SDKHandler>
         BattleDataMgr.Instance.submarinePos = pos;
     }
 
-    List<Vector2> positions = new List<Vector2>();
+    Texture2D imageTexture = null;
     /// <summary>
-    /// 人体识别接受坐标  
+    /// 潜水艇接收对方图片
     /// </summary>
-    /// <param name="positionStrList"></param>
-    public void ResponseHumanBodyJoint(string positionStrList)
+    /// <param name="textureBytes"></param>
+    public void ResponseSubmarineOtherImage(string textureBytes)
     {
-        positions.Clear();
-        string[] positionArr = positionStrList.Split(';');
-
-        for (int i = 0; i < positionArr.Length; i++)
+        if (imageTexture!=null)
         {
-            string[] jointXY = positionArr[i].Split(',');
-            Vector2 pos = new Vector2(float.Parse(jointXY[0]), float.Parse(jointXY[1]));
-            positions.Add(pos);
+            Destroy(imageTexture);
         }
 
+        byte[] data = Convert.FromBase64String(textureBytes);
 
+        if (data == null || data.Length == 0)
+        {
+            Debug.Log("ResponseSubmarineOtherImage 接收到对方图片Data为空");
+            return;
+        }
+        //bytes转成Texture
+        imageTexture = new Texture2D(368, 640, TextureFormat.RGBA32, false);
+        imageTexture.LoadImage(data);
+        imageTexture.Apply();
+
+        //Debug.Log("ResponseSubmarineOtherImage 宽度="+ imageTexture.width);
+
+        if (SubmarineBattleFramework.Instance!=null)
+        {
+            SubmarineBattleFramework.Instance.RefreshOtherImage(imageTexture);
+        }
     }
 }

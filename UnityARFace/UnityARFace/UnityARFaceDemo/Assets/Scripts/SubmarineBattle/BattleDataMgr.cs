@@ -12,7 +12,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 障碍物移动速度
     /// </summary>
-    public float obstacleSpeed = 0.15f;
+    public float obstacleSpeed = 5f;
 
     /// <summary>
     /// 积分
@@ -77,12 +77,22 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
     /// <summary>
     /// 潜水艇位置
     /// </summary>
-    public float submarinePos = 1;
+    public float submarinePos = 0;
 
     /// <summary>
     /// 一个障碍物的两个柱子之间的间隔距离
     /// </summary>
     public float partObstacleDistance = 5;
+
+    /// <summary>
+    /// ar渲染图片
+    /// </summary>
+    public Texture2D arTexture;
+
+    /// <summary>
+    /// 游戏渲染图片
+    /// </summary>
+    public Texture2D battleTexture;
 
     public void ResetData()
     {
@@ -94,7 +104,7 @@ public class BattleDataMgr : Singleton<BattleDataMgr>
         passObstacleCount = 0;
         obstaclePosition = 0;
         lastObstacle = null;
-        submarinePos = 1;
+        submarinePos = 0;
         integralAddSubNumber = 10;
         integralAddRate = 0.1f;
         speedAddSubNumber = 20;
