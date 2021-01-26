@@ -146,4 +146,36 @@ public class SDKHandler : SingletonMono<SDKHandler>
         float pos = GameConst.CheckAllDistance * rate + GameConst.AllDistanceDownPos;
         BattleDataMgr.Instance.submarinePos = pos;
     }
+
+    Texture2D imageTexture = null;
+    /// <summary>
+    /// 潜水艇接收对方图片
+    /// </summary>
+    /// <param name="textureBytes"></param>
+    public void ResponseSubmarineOtherImage(string textureBytes)
+    {
+        if (imageTexture!=null)
+        {
+            Destroy(imageTexture);
+        }
+
+        byte[] data = Convert.FromBase64String(textureBytes);
+
+        if (data == null || data.Length == 0)
+        {
+            Debug.Log("ResponseSubmarineOtherImage 接收到对方图片Data为空");
+            return;
+        }
+        //bytes转成Texture
+        imageTexture = new Texture2D(368, 640, TextureFormat.RGBA32, false);
+        imageTexture.LoadImage(data);
+        imageTexture.Apply();
+
+        //Debug.Log("ResponseSubmarineOtherImage 宽度="+ imageTexture.width);
+
+        if (SubmarineBattleFramework.Instance!=null)
+        {
+            SubmarineBattleFramework.Instance.RefreshOtherImage(imageTexture);
+        }
+    }
 }

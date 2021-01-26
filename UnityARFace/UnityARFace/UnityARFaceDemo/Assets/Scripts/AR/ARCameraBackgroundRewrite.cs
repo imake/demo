@@ -20,7 +20,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
     [RequireComponent(typeof(ARCameraManager))]
     public class ARCameraBackgroundRewrite : MonoBehaviour
     {
-        public RawImage rawImage;
+        public Camera arCamera;
 
         /// <summary>
         /// Name for the custom rendering command buffer.
@@ -354,9 +354,24 @@ namespace UnityEngine.XR.ARFoundation.Samples
             }
             //Debug.Log("OnCameraFrameReceivedTime=" + Time.time);
 
-            byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 960));
+            if (SceneManager.GetActiveScene().name.Equals("ARFaceBlendShapesSubScene"))
+            {
+                if (BattleDataMgr.Instance.isGameOver)
+                {
+                    //BattleDataMgr.Instance.arTexture = HelperTools.GetScreenTexture(arCamera, new Rect(0, 0, 480, 640));
+                }
+            }
+            else
+            {
+                Texture2D texture = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
+                byte[] bytes = texture.EncodeToPNG();
 
-            SDKManager.Instance.RefreshWithBytes(bytes);
+                SDKManager.Instance.RefreshWithBytes(bytes);
+            }
+
+            //byte[] bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 960));
+
+            //SDKManager.Instance.RefreshWithBytes(bytes);
         }
 
         /// <summary>
@@ -422,9 +437,9 @@ namespace UnityEngine.XR.ARFoundation.Samples
             //Debug.Log("false```Head = " + go.transform.position+ "   Head = " + go.transform.eulerAngles);
         }
 
-        byte[] bytes;
-        public void CameraOpenButtonPressed()
-        {
+        //byte[] bytes;
+        //public void CameraOpenButtonPressed()
+        //{
             //GameObject go = GameObject.FindGameObjectWithTag("SlothHead");
             //cameraBackground.enabled = true;
             //Camera.main.clearFlags = CameraClearFlags.SolidColor;
@@ -432,19 +447,19 @@ namespace UnityEngine.XR.ARFoundation.Samples
             //Debug.Log("true```Camera.main = " + Camera.main.transform.localPosition + "  Camera.main = " + Camera.main.transform.localEulerAngles);
             //Debug.Log("true```Head = " + go.transform.position + "   Head = " + go.transform.eulerAngles);
 
-            StartCoroutine(Screenshot());
-        }
+        //    StartCoroutine(Screenshot());
+        //}
 
-        IEnumerator Screenshot()
-        {
-            Debug.Log("CameraOpenButtonPressedStartTime=" + Time.time);
-            bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
+        //IEnumerator Screenshot()
+        //{
+            //Debug.Log("CameraOpenButtonPressedStartTime=" + Time.time);
+            //bytes = HelperTools.GetScreenTexture(Camera.main, new Rect(0, 0, 480, 640));
 
-            Debug.Log("CameraOpenButtonPressedEndTime=" + Time.time + " " + bytes.Length);
+            //Debug.Log("CameraOpenButtonPressedEndTime=" + Time.time + " " + bytes.Length);
 
-            yield return new WaitForSeconds(0.5f);
+            //yield return new WaitForSeconds(0.5f);
 
-            Debug.Log("ScreenshotTime=" + Time.time + " " + bytes.Length);
+            //Debug.Log("ScreenshotTime=" + Time.time + " " + bytes.Length);
 
             //FileStream filestr = File.Create(UnityEngine.Application.dataPath + "/1.bytes");
             //Debug.Log(UnityEngine.Application.dataPath);
@@ -452,7 +467,7 @@ namespace UnityEngine.XR.ARFoundation.Samples
             //filestr.Flush(); //流会缓冲，此行代码指示流不要缓冲数据，立即写入到文件。
             //filestr.Close(); //关闭流并释放所有资源，同时将缓冲区的没有写入的数据，写入然后再关闭。
             //filestr.Dispose();//释放流所占用的资源，Dispose()会调用Close(),Close()会调用Flush(); 也会写入缓冲区内的数据。
-        }
+        //}
 
         private void OnPostRender()
         {

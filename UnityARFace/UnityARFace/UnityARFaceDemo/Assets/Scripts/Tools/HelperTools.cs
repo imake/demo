@@ -42,7 +42,7 @@ public static class HelperTools
     /// 截图
     /// </summary>
     /// <returns></returns>
-    public static byte[] GetScreenTexture(Camera camera, Rect rect)
+    public static Texture2D GetScreenTexture(Camera camera, Rect rect)
     {
         // 创建一个RenderTexture对象
         if (rt == null)
@@ -61,10 +61,10 @@ public static class HelperTools
         // 激活这个rt, 并从中中读取像素。
         RenderTexture.active = rt;
 
-        if (screenShot == null)
-        {
+        //if (screenShot == null)
+        //{
             screenShot = new Texture2D((int)rect.width, (int)rect.height, TextureFormat.RGBA32, false);
-        }
+        //}
         screenShot.ReadPixels(rect, 0, 0);// 注：这个时候，它是从RenderTexture.active中读取像素
         screenShot.Apply();
 
@@ -73,9 +73,11 @@ public static class HelperTools
         //ps: camera2.targetTexture = null;
         RenderTexture.active = null; // JC: added to avoid errors
         // 最后将这些纹理数据，成一个png图片文件
-        byte[] bytes = screenShot.EncodeToPNG();
+        //byte[] bytes = screenShot.EncodeToPNG();
 
-        return bytes;
+        //return bytes;
+
+        return screenShot;
     }
 
     public static void Hurt(int damage, GameObject go)
