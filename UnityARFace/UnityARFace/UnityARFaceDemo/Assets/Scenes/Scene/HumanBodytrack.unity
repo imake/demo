@@ -634,6 +634,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LineRendererPrefab: {fileID: 1780351997603834617, guid: 1f094601e6173e442af8ec998da3475c,
     type: 3}
+  sphere: {fileID: 9041667618122021626, guid: b537842a0a83f8844895b2867c601557, type: 3}
+  upperPrefab: {fileID: 2251314110724894221, guid: 53f7c290b99baae4680c3ce020b5a969,
+    type: 3}
+  headPrefab: {fileID: 2766928179087405959, guid: 383ce6d7aed60494998bb740c2870800,
+    type: 3}
 --- !u!4 &1684462375
 Transform:
   m_ObjectHideFlags: 0

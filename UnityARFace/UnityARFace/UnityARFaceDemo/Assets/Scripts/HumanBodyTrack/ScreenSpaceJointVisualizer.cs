@@ -17,6 +17,8 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
         set { m_LineRendererPrefab = value; }
     }
 
+    public GameObject sphere;
+
     Dictionary<int, GameObject> m_LineRenderers;
     static HashSet<int> s_JointSet = new HashSet<int>();
 
@@ -28,11 +30,20 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
 
     private List<Vector2> jointList = new List<Vector2>();
 
+    private List<GameObject> jointSpheres;
+
+    private Vector3 upperBodyPos = Vector3.zero;
+
+    public GameObject upperPrefab;
+
+    public GameObject headPrefab;
+
     void Awake()
     {
         SelectJoint(null);
         InitHumanBodyPose2DJoint(jointList);
         m_LineRenderers = new Dictionary<int, GameObject>();
+        jointSpheres = new List<GameObject>();
 
         SetJointsInfo();
     }
@@ -61,11 +72,16 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
                 if (joint.tracked)
                 {
                     positions[jointCount++] = joint.position;
-                    if (!s_JointSet.Add(boneIndex))
-                        break;
+                    //if (!s_JointSet.Add(boneIndex))
+                    //    break;
                 }
                 else
                     break;
+
+                if (jointCount>=2)
+                {
+                    break;
+                }
 
                 boneIndex = joint.parentIndex;
             }
@@ -73,8 +89,8 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
             // Render the joints as lines on the camera's near clip plane.
             //lineRenderer.useWorldSpace = true;
             lineRenderer.positionCount = jointCount;
-            lineRenderer.startWidth = 0.05f;
-            lineRenderer.endWidth = 0.05f;
+            lineRenderer.startWidth = 0.17f;
+            lineRenderer.endWidth = 0.17f;
             lineRenderer.startColor = new Color(0.1f, 0.1f, 0.1f, 1f);
             lineRenderer.endColor = new Color(0.6f, 0.6f, 0.6f, 1f);
             for (int i = 0; i < jointCount; ++i)
@@ -95,11 +111,44 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
     void SetJointsInfo()
     {
         s_JointSet.Clear();
+        for (int j = 0; j < jointSpheres.Count; j++)
+        {
+            GameObject.Destroy(jointSpheres[j]);
+        }
+        jointSpheres.Clear();
         for (int i = joints.Count - 1; i >= 0; i--)
         {
             if (joints[i].parentIndex != -1)
-                UpdateRenderer(joints, i, joints[i].name);
+            {
+                if (i != 1&&i!=9&&i!=10&&i!=4)
+                {
+                    UpdateRenderer(joints, i, joints[i].name);
+                }
+
+                GameObject go = Instantiate(sphere);
+                Vector3 pos = joints[i].position;
+                var worldPos = Camera.main.ViewportToWorldPoint(
+                new Vector3(pos.x, pos.y, Camera.main.nearClipPlane));
+                go.transform.SetParent(transform);
+                go.transform.localPosition = new Vector3(worldPos.x, worldPos.y, worldPos.z);
+                go.name = joints[i].index.ToString();
+                jointSpheres.Add(go);
+            }
+            if (joints[i].parentIndex == -1)
+            {
+                GameObject go = Instantiate(sphere);
+                Vector3 pos = joints[i].position;
+                var worldPos = Camera.main.ViewportToWorldPoint(
+                new Vector3(pos.x, pos.y, Camera.main.nearClipPlane));
+                go.transform.SetParent(transform);
+                go.transform.localPosition = new Vector3(worldPos.x, worldPos.y, worldPos.z);
+                go.name = joints[i].index.ToString();
+                jointSpheres.Add(go);
+            }
         }
+
+        CheckUpperBodyPos(jointSpheres);
+        CheckHeadPos(jointSpheres);
     }
 
     void HideJointLines()
@@ -154,39 +203,42 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
 
     public void SelectJoint(List<Vector2> posList)
     {
-        int rate = 20;
-        float height = 640/rate;
-        float value = 20;
+        int heightRate = 20;
+        int widthRate =15;
+        float height = 640;
+        float width = 480;
+        float heightValue = 20;
+        float widthValue = 17;
         jointList.Clear();
-        Vector2 pos = new Vector2(height - 261.14355f / rate - value, height - 114.13994f / rate - value);//Heads->0
+        Vector2 pos = new Vector2(-((width - 261.14355f )/ widthRate - widthValue), (height - 114.13994f) / heightRate - heightValue);//Heads->0
         jointList.Add(pos);
-        pos = new Vector2(height - 230.31705f / rate - value, height - 139.27298f / rate - value);//RightShoulder1->12
+        pos = new Vector2(-((width - 230.31705f )/ widthRate - widthValue), (height - 139.27298f) / heightRate - heightValue);//RightShoulder1->12
         jointList.Add(pos);
-        pos = new Vector2(height - 221.9626f / rate - value, height - 182.99167f / rate - value);//RightForearm->14
+        pos = new Vector2(-((width - 221.9626f )/ widthRate - widthValue), (height - 182.99167f) / heightRate - heightValue);//RightForearm->14
         jointList.Add(pos);
-        pos = new Vector2(height - 229.92441f / rate - value, height - 214.94897f / rate - value);//RightHand->16
+        pos = new Vector2(-((width - 229.92441f) / widthRate - widthValue), (height - 214.94897f) / heightRate - heightValue);//RightHand->16
         jointList.Add(pos);
-        pos = new Vector2(height - 280.89972f / rate - value, height - 142.83371f / rate - value);//LeftShoulder1->11
+        pos = new Vector2(-((width - 280.89972f) / widthRate - widthValue), (height - 142.83371f) / heightRate - heightValue);//LeftShoulder1->11
         jointList.Add(pos);
-        pos = new Vector2(height - 284.1551f / rate - value, height - 182.40266f / rate - value);//LeftForearm->13
+        pos = new Vector2(-((width - 284.1551f) / widthRate - widthValue), (height - 182.40266f) / heightRate - heightValue);//LeftForearm->13
         jointList.Add(pos);
-        pos = new Vector2(height - 289.23422f / rate - value, height - 214.90384f / rate - value);//LeftHand->15
+        pos = new Vector2(-((width - 289.23422f) / widthRate - widthValue), (height - 214.90384f) / heightRate - heightValue);//LeftHand->15
         jointList.Add(pos);
-        pos = new Vector2(height - 225.00595f / rate - value, height - 274.51468f / rate - value);//RightLeg->26
+        pos = new Vector2(-((width - 250.6193f) / widthRate - widthValue), (height - 110.42336f) / heightRate - heightValue);//RightEye->8
         jointList.Add(pos);
-        pos = new Vector2(height - 210.31467f / rate - value, height - 330.83328f / rate - value);//RightFoot->28
+        pos = new Vector2(-((width - 269.80917f) / widthRate - widthValue), (height - 112.069595f) / heightRate - heightValue);//LeftEye->7
         jointList.Add(pos);
-        pos = new Vector2(height - 260.6173f / rate - value, height - 275.4993f / rate - value);//LeftLeg->25
+        pos = new Vector2(-((width - 269.75006f) / widthRate - widthValue), (height - 206.8741f) / heightRate - heightValue);//Root1->23
         jointList.Add(pos);
-        pos = new Vector2(height - 254.0951f / rate - value, height - 328.40942f / rate - value);//LeftFoot->27
+        pos = new Vector2(-((width - 233.8795f) / widthRate - widthValue), (height - 204.1214f) / heightRate - heightValue);//Root2->24
         jointList.Add(pos);
-        pos = new Vector2(height - 250.6193f / rate - value, height - 110.42336f / rate - value);//RightEye->8
+        pos = new Vector2(-((width - 225.00595f) / widthRate - widthValue), (height - 274.51468f) / heightRate - heightValue);//RightLeg->26
         jointList.Add(pos);
-        pos = new Vector2(height - 269.80917f / rate - value, height - 112.069595f / rate - value);//LeftEye->7
+        pos = new Vector2(-((width - 210.31467f) / widthRate - widthValue), (height - 330.83328f) / heightRate - heightValue);//RightFoot->28
         jointList.Add(pos);
-        pos = new Vector2(height - 269.75006f / rate - value, height - 206.8741f / rate - value);//Root1->23
+        pos = new Vector2(-((width - 260.6173f) / widthRate - widthValue), (height - 275.4993f) / heightRate - heightValue);//LeftLeg->25
         jointList.Add(pos);
-        pos = new Vector2(height - 233.8795f / rate - value, height - 204.1214f / rate - value);//Root2->24
+        pos = new Vector2(-((width - 254.0951f) / widthRate - widthValue), (height - 328.40942f) / heightRate - heightValue);//LeftFoot->27
         jointList.Add(pos);
     }
 
@@ -203,7 +255,7 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
         //RightShoulder1->12
         name = "RightShoulder1";
         index = 1;
-        parentIndex = 14;
+        parentIndex = 10;
         pos = posList[index];
         joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
         joints.Add(joint);
@@ -248,41 +300,9 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
         joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
         joints.Add(joint);
 
-        //RightLeg->26
-        name = "RightLeg";
-        index = 7;
-        parentIndex = 14;
-        pos = posList[index];
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //RightFoot->28
-        name = "RightFoot";
-        index = 8;
-        parentIndex = 7;
-        pos = posList[index];
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //LeftLeg->25
-        name = "LeftLeg";
-        index = 9;
-        parentIndex = 13;
-        pos = posList[index];
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //LeftFoot->27
-        name = "LeftFoot";
-        index = 10;
-        parentIndex = 9;
-        pos = posList[index];
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
         //RightEye->8
         name = "RightEye";
-        index = 11;
+        index = 7;
         parentIndex = 0;
         pos = posList[index];
         joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
@@ -290,7 +310,7 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
 
         //LeftEye->7
         name = "LeftEye";
-        index = 12;
+        index = 8;
         parentIndex = 0;
         pos = posList[index];
         joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
@@ -298,7 +318,7 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
 
         //Root1->23
         name = "Root1";
-        index = 13;
+        index = 9;
         parentIndex = 4;
         pos = posList[index];
         joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
@@ -306,149 +326,78 @@ public class ScreenSpaceJointVisualizer : MonoBehaviour
 
         //Root2->24
         name = "Root2";
+        index = 10;
+        parentIndex = 9;
+        pos = posList[index];
+        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
+        joints.Add(joint);
+
+        //RightLeg->26
+        name = "RightLeg";
+        index = 11;
+        parentIndex = 10;
+        pos = posList[index];
+        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
+        joints.Add(joint);
+
+        //RightFoot->28
+        name = "RightFoot";
+        index = 12;
+        parentIndex = 11;
+        pos = posList[index];
+        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
+        joints.Add(joint);
+
+        //LeftLeg->25
+        name = "LeftLeg";
+        index = 13;
+        parentIndex = 9;
+        pos = posList[index];
+        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
+        joints.Add(joint);
+
+        //LeftFoot->27
+        name = "LeftFoot";
         index = 14;
         parentIndex = 13;
         pos = posList[index];
         joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
         joints.Add(joint);
+    }
 
-        /*
-        //Heads
-        string name = "Heads";
-        int index = 0;
-        int parentIndex = 1;
-        Vector3 pos = new Vector3(0, 0);
-        HumanBodyPose2DJoint joint = new HumanBodyPose2DJoint(name,index, parentIndex,pos,true);
-        joints.Add(joint);
+    private void CheckUpperBodyPos(List<GameObject> goList)
+    {
+        Vector3 pos_1 = goList[13].transform.localPosition;
+        Vector3 pos_4 = goList[10].transform.localPosition;
+        Vector3 pos_9 = goList[5].transform.localPosition;
+        Vector3 pos_10 = goList[4].transform.localPosition;
 
-        //Neck1
-        name = "Neck1";
-        index = 1;
-        parentIndex = 16;
-        pos = new Vector3(0, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
+        Vector3 left = new Vector3((pos_1.x + pos_10.x) / 2, (pos_1.y + pos_10.y) / 2, pos_1.z);
+        Vector3 right = new Vector3((pos_4.x + pos_9.x) / 2, (pos_4.y + pos_9.y) / 2, pos_4.z);
+        Vector3 up = new Vector3((pos_1.x + pos_4.x) / 2, (pos_1.y + pos_4.y) / 2, pos_1.z);
+        Vector3 down = new Vector3((pos_9.x + pos_10.x) / 2, (pos_9.y + pos_10.y) / 2, pos_9.z);
 
-        //RightShoulder1
-        name = "RightShoulder1";
-        index = 2;
-        parentIndex = 1;
-        pos = new Vector3(-1f, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
+        upperBodyPos = new Vector3((left.x + right.x) / 2, (up.y + down.y) / 2, left.z);
 
-        //RightForearm
-        name = "RightForearm";
-        index = 3;
-        parentIndex = 2;
-        pos = new Vector3(-2f, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
+        GameObject upperBodyGo = Instantiate(upperPrefab);
+        upperBodyGo.transform.SetParent(transform);
+        upperBodyGo.transform.localPosition = upperBodyPos;
+    }    
 
-        //RightHand
-        name = "RightHand";
-        index = 4;
-        parentIndex = 3;
-        pos = new Vector3(-3f, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
+    private void CheckHeadPos(List<GameObject> goList)
+    {
+        GameObject headGo = Instantiate(headPrefab);
+        headGo.transform.SetParent(goList[14].transform);
+        headGo.transform.localPosition = Vector3.zero;
 
-        //LeftShoulder1
-        name = "LeftShoulder1";
-        index = 5;
-        parentIndex = 1;
-        pos = new Vector3(1f, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
+        GameObject leftEye = goList[6];
+        GameObject rightEye = goList[7];
 
-        //LeftForearm
-        name = "LeftForearm";
-        index = 6;
-        parentIndex = 5;
-        pos = new Vector3(2f, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
+        float eyeDis = Vector3.Distance(leftEye.transform.position, rightEye.transform.position);
+        float eye_y = leftEye.transform.position.y - rightEye.transform.position.y;
+        float angleHead = (eye_y - eyeDis) * 180 / 3.1415926f;
 
-        //LeftHand
-        name = "LeftHand";
-        index = 7;
-        parentIndex = 6;
-        pos = new Vector3(3f, -1f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //RightUpLeg
-        name = "RightUpLeg";
-        index = 8;
-        parentIndex = 16;
-        pos = new Vector3(-1f, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //RightLeg
-        name = "RightLeg";
-        index = 9;
-        parentIndex =8;
-        pos = new Vector3(-2f, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //RightFoot
-        name = "RightFoot";
-        index = 10;
-        parentIndex = 9;
-        pos = new Vector3(-3f, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //LeftUpLeg
-        name = "LeftUpLeg";
-        index = 11;
-        parentIndex = 16;
-        pos = new Vector3(1f, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //LeftLeg
-        name = "LeftLeg";
-        index = 12;
-        parentIndex = 11;
-        pos = new Vector3(2f, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //LeftFoot
-        name = "LeftFoot";
-        index = 13;
-        parentIndex = 12;
-        pos = new Vector3(3f, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //RightEye
-        name = "RightEye";
-        index = 14;
-        parentIndex = 0;
-        pos = new Vector3(0.5f, 0);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //LeftEye
-        name = "LeftEye";
-        index = 15;
-        parentIndex = 0;
-        pos = new Vector3(-0.5f, 0);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-
-        //Root
-        name = "Root";
-        index = 16;
-        parentIndex = -1;
-        pos = new Vector3(0, -5f);
-        joint = new HumanBodyPose2DJoint(name, index, parentIndex, pos, true);
-        joints.Add(joint);
-        */
+        headGo.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angleHead));
     }
 
     public void ChangeHumanBodyPose2DJoint()
